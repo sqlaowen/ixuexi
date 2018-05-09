@@ -1,0 +1,1 @@
+id,rf_bill_type,rf_bill_no,rf_bill_detail_no,uuid,order_id,order_type,rf_busi_id,rf_busi_type,fee_code,fee_name,invoice_method,direction,currency,bal,account_id,status,bill_type,bill_id,created,related_time,audited,modified,remark,del_status
