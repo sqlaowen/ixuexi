@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WXBankRefOpenidMapper">
+
+	<resultMap id="BaseResultMap" type="wxBankRefOpenid">
+		<id column="REF_ID" jdbcType="VARCHAR" property="refId" />
+		<result column="WX_ID" jdbcType="VARCHAR" property="wxId" />
+		<result column="BANK_NAME" jdbcType="VARCHAR" property="bankName" />
+		<result column="BANK_NO" jdbcType="VARCHAR" property="bankNo" />
+		<result column="OPENID" jdbcType="VARCHAR" property="openid" />
+		<result column="CREATE_TIME" jdbcType="DECIMAL" property="createTime" />
+		<result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		REF_ID, WX_ID, BANK_NAME,BANK_NO, OPENID, CREATE_TIME, CREATE_USER
+	</sql>
+	
+	<select id="findById" parameterType="string" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from T_WX_BANKREFOPENID
+		where REF_ID = #{refId,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 根据银行卡号查询 -->
+	<select id="findByBankNo" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from T_WX_BANKREFOPENID
+		where BANK_NO = #{bankNo,jdbcType=VARCHAR}
+		and WX_ID=#{wxId}
+	</select>
+	
+	<!-- 根据openid查询 -->
+	<select id="findByOpenid" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from T_WX_BANKREFOPENID
+		where OPENID = #{openid,jdbcType=VARCHAR}
+		and WX_ID=#{wxId}
+	</select>
+	
+	<insert id="saveOne" parameterType="wxBankRefOpenid">
+		insert into T_WX_BANKREFOPENID
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="refId != null">
+				REF_ID,
+			</if>
+			<if test="wxId != null">
+				WX_ID,
+			</if>
+			<if test="bankName != null">
+				BANK_NAME,
+			</if>
+			<if test="bankNo != null">
+				BANK_NO,
+			</if>
+			<if test="openid != null">
+				OPENID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="createUser != null">
+				CREATE_USER,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="refId != null">
+				#{refId,jdbcType=VARCHAR},
+			</if>
+			<if test="wxId != null">
+				#{wxId,jdbcType=VARCHAR},
+			</if>
+			<if test="bankName != null">
+				#{bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankNo != null">
+				#{bankNo,jdbcType=VARCHAR},
+			</if>
+			<if test="openid != null">
+				#{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=DECIMAL},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="editBankNo">
+		update T_WX_BANKREFOPENID
+		set BANK_NO = #{bankNo,jdbcType=VARCHAR},
+		BANK_NAME = #{bankName,jdbcType=VARCHAR}
+		where OPENID = #{openid,jdbcType=VARCHAR}
+		and WX_ID=#{wxId}
+	</update>
+	
+</mapper>

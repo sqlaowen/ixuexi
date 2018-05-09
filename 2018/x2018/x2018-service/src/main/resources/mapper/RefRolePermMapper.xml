@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.laowen.mapper.RefRolePermMapper">
+
+    <resultMap id="BaseResultMap" type="refRolePerm">
+        <id column="ref_id" jdbcType="VARCHAR" property="refId"/>
+        <result column="perm_id" jdbcType="VARCHAR" property="permId"/>
+        <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ref_id, perm_id, role_id
+  </sql>
+
+    <!-- 根据roleId删除 -->
+    <delete id="delByRoleId">
+    delete from ref_role_perm
+    where role_id = #{roleId}
+  </delete>
+
+    <!-- <insert id="saveBatch">
+      insert into ref_role_perm (role_id,perm_id) values
+      <foreach collection="permIdList" item="permId" separator="," >
+          (#{roleId},#{permId})
+      </foreach>
+    </insert> -->
+
+    <insert id="saveBatch">
+        insert into ref_role_perm (ref_id, role_id, perm_id) values
+        <foreach collection="mapList" item="m" separator=",">
+            (
+            #{m.refId,jdbcType=VARCHAR}
+            ,#{m.roleId,jdbcType=VARCHAR}
+            ,#{m.permId,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <!-- <insert id="saveOne" parameterType="refRolePerm">
+      insert into ref_role_perm
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="refId != null">
+          ref_id,
+        </if>
+        <if test="permId != null">
+          perm_id,
+        </if>
+        <if test="roleId != null">
+          role_id,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="refId != null">
+          #{refId,jdbcType=VARCHAR},
+        </if>
+        <if test="permId != null">
+          #{permId,jdbcType=VARCHAR},
+        </if>
+        <if test="roleId != null">
+          #{roleId,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </insert> -->
+
+</mapper>

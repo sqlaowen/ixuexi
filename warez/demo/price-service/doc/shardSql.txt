@@ -1,0 +1,120 @@
+﻿CREATE DATABASE IF NOT EXISTS price_0 default charset utf8 COLLATE utf8_general_ci ; 
+create table IF NOT EXISTS `price_0`.`ec_goods_0`
+(
+   goods_id             varchar(32) not null comment '商品id',
+   platform_id          int comment '平台id',
+   sku_id               varchar(32) comment '商品sku',
+   sku_img              varchar(512) comment '商品img',
+   sku_url              varchar(512) comment '商品url',
+   sku_note             varchar(128) comment '商品描述',
+   sku_state            int comment '商品状态[0:可见, 1:删除]',
+   sku_vender           varchar(32) comment '所属商家',
+   sku_shop             varchar(32) comment '所属店铺',
+   create_time          datetime comment 'create_time',
+   create_user          varchar(32) comment 'create_user',
+   update_time          datetime comment 'update_time',
+   update_user          varchar(32) comment 'update_user',
+   primary key (goods_id)
+); 
+create table IF NOT EXISTS `price_0`.`ec_history_price_0`
+(
+   price_id             varchar(32) not null comment '价格id',
+   goods_id             varchar(32) comment '商品id',
+   sku_price            varchar(32) comment '商品价格',
+   price_state          int comment '价格状态[0:可见, 1:删除]',
+   create_time          date comment 'create_time',
+   create_user          varchar(32) comment 'create_user',
+   primary key (price_id)
+); 
+create table IF NOT EXISTS `price_0`.`ec_goods_2`
+(
+   goods_id             varchar(32) not null comment '商品id',
+   platform_id          int comment '平台id',
+   sku_id               varchar(32) comment '商品sku',
+   sku_img              varchar(512) comment '商品img',
+   sku_url              varchar(512) comment '商品url',
+   sku_note             varchar(128) comment '商品描述',
+   sku_state            int comment '商品状态[0:可见, 1:删除]',
+   sku_vender           varchar(32) comment '所属商家',
+   sku_shop             varchar(32) comment '所属店铺',
+   create_time          datetime comment 'create_time',
+   create_user          varchar(32) comment 'create_user',
+   update_time          datetime comment 'update_time',
+   update_user          varchar(32) comment 'update_user',
+   primary key (goods_id)
+); 
+create table IF NOT EXISTS `price_0`.`ec_history_price_2`
+(
+   price_id             varchar(32) not null comment '价格id',
+   goods_id             varchar(32) comment '商品id',
+   sku_price            varchar(32) comment '商品价格',
+   price_state          int comment '价格状态[0:可见, 1:删除]',
+   create_time          date comment 'create_time',
+   create_user          varchar(32) comment 'create_user',
+   primary key (price_id)
+); 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS price_1 default charset utf8 COLLATE utf8_general_ci ; 
+create table IF NOT EXISTS `price_1`.`ec_goods_1`
+(
+   goods_id             varchar(32) not null comment '商品id',
+   platform_id          int comment '平台id',
+   sku_id               varchar(32) comment '商品sku',
+   sku_img              varchar(512) comment '商品img',
+   sku_url              varchar(512) comment '商品url',
+   sku_note             varchar(128) comment '商品描述',
+   sku_state            int comment '商品状态[0:可见, 1:删除]',
+   sku_vender           varchar(32) comment '所属商家',
+   sku_shop             varchar(32) comment '所属店铺',
+   create_time          datetime comment 'create_time',
+   create_user          varchar(32) comment 'create_user',
+   update_time          datetime comment 'update_time',
+   update_user          varchar(32) comment 'update_user',
+   primary key (goods_id)
+); 
+create table IF NOT EXISTS `price_1`.`ec_history_price_1`
+(
+   price_id             varchar(32) not null comment '价格id',
+   goods_id             varchar(32) comment '商品id',
+   sku_price            varchar(32) comment '商品价格',
+   price_state          int comment '价格状态[0:可见, 1:删除]',
+   create_time          date comment 'create_time',
+   create_user          varchar(32) comment 'create_user',
+   primary key (price_id)
+); 
+create table IF NOT EXISTS `price_1`.`ec_goods_3`
+(
+   goods_id             varchar(32) not null comment '商品id',
+   platform_id          int comment '平台id',
+   sku_id               varchar(32) comment '商品sku',
+   sku_img              varchar(512) comment '商品img',
+   sku_url              varchar(512) comment '商品url',
+   sku_note             varchar(128) comment '商品描述',
+   sku_state            int comment '商品状态[0:可见, 1:删除]',
+   sku_vender           varchar(32) comment '所属商家',
+   sku_shop             varchar(32) comment '所属店铺',
+   create_time          datetime comment 'create_time',
+   create_user          varchar(32) comment 'create_user',
+   update_time          datetime comment 'update_time',
+   update_user          varchar(32) comment 'update_user',
+   primary key (goods_id)
+); 
+create table IF NOT EXISTS `price_1`.`ec_history_price_3`
+(
+   price_id             varchar(32) not null comment '价格id',
+   goods_id             varchar(32) comment '商品id',
+   sku_price            varchar(32) comment '商品价格',
+   price_state          int comment '价格状态[0:可见, 1:删除]',
+   create_time          date comment 'create_time',
+   create_user          varchar(32) comment 'create_user',
+   primary key (price_id)
+); 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------

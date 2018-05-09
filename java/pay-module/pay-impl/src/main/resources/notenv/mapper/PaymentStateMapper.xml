@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.single.dao.PaymentStateMapper" >
+
+  <resultMap id="BaseResultMap" type="paymentState" >
+    <id column="payment_state_id" property="paymentStateId" jdbcType="INTEGER" />
+    <result column="state_name" property="stateName" jdbcType="VARCHAR" />
+    <result column="state_noet" property="stateNoet" jdbcType="VARCHAR" />
+    <result column="state_create" property="stateCreate" jdbcType="TIMESTAMP" />
+    <result column="state_update" property="stateUpdate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    payment_state_id, state_name, state_noet, state_create, state_update
+  </sql>
+  
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pay_payment_state
+    where payment_state_id = #{paymentStateId,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

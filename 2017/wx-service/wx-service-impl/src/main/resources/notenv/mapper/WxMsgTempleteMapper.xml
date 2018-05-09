@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WxMsgTempleteMapper">
+    <resultMap id="BaseResultMap" type="wxMsgTemplete">
+        <id column="TEMP_ID" jdbcType="VARCHAR" property="tempId"/>
+        <result column="WX_ID" property="wxId" jdbcType="VARCHAR" />
+        <result column="TEMP_TITLE" jdbcType="VARCHAR" property="tempTitle"/>
+        <result column="TEMP_CONTENT" jdbcType="VARCHAR" property="tempContent"/>
+        <result column="INDUSTRY1" jdbcType="VARCHAR" property="industry1"/>
+        <result column="INDUSTRY2" jdbcType="VARCHAR" property="industry2"/>
+        <result column="for_Example" jdbcType="VARCHAR" property="forExample"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        TEMP_ID,WX_ID, TEMP_TITLE, TEMP_CONTENT, INDUSTRY1, INDUSTRY2,for_Example
+    </sql>
+    <select id="findById" parameterType="String" resultMap="BaseResultMap">
+
+        select
+        <include refid="Base_Column_List"/>
+        from T_WX_MSGTEMPLETE
+        where TEMP_ID = #{tempId,jdbcType=VARCHAR}
+    </select>
+
+
+    <insert id="saveOne" parameterType="wxMsgTemplete">
+        insert into T_WX_MSGTEMPLETE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tempId != null">
+                TEMP_ID,
+            </if>
+            <if test="wxId != null">
+                WX_ID,
+            </if>
+            <if test="tempTitle != null">
+                TEMP_TITLE,
+            </if>
+            <if test="tempContent != null">
+                TEMP_CONTENT,
+            </if>
+            <if test="industry1 != null">
+                INDUSTRY1,
+            </if>
+            <if test="industry2 != null">
+                INDUSTRY2,
+            </if>
+            <if test="forExample != null">
+            	for_Example,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tempId != null">
+                #{tempId,jdbcType=VARCHAR},
+            </if>
+            <if test="wxId != null">
+                #{wxId},
+            </if>
+            <if test="tempTitle != null">
+                #{tempTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="tempContent != null">
+                #{tempContent,jdbcType=VARCHAR},
+            </if>
+            <if test="industry1 != null">
+                #{industry1,jdbcType=VARCHAR},
+            </if>
+            <if test="industry2 != null">
+                #{industry2,jdbcType=VARCHAR},
+            </if>
+            <if test="forExample != null">
+            	#{forExample},
+            </if>
+        </trim>
+    </insert>
+
+	<!-- 重新初始化 -->
+    <delete id="delAll" parameterType="string">
+    	delete from T_WX_MSGTEMPLETE
+    	where WX_ID=#{wxId}
+    </delete>
+    
+</mapper>

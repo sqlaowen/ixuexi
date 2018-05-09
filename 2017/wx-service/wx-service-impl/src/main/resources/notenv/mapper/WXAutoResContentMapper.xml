@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WXAutoResContentMapper" >
+  <resultMap id="BaseResultMap" type="wxAutoResContent" >
+    <id column="CONTENT_ID" property="contentId" jdbcType="VARCHAR" />
+    <result column="RES_ID" property="resId" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="PIC_URL" property="picUrl" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+    <result column="content_seq" property="contentSeq"/>
+    <result column="createTime" property="createTime" jdbcType="DECIMAL" />
+    <result column="createUser" property="createUser" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="DECIMAL" />
+    <result column="updateUser" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    content_id, res_id, title, description, pic_url, url, status,content_seq, createTime, createUser, 
+    updateTime, updateUser
+  </sql>
+  
+  <!-- 根据id查询 -->
+  <select id="findById" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_WX_AUTORESCONTENT
+    where CONTENT_ID = #{contentId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据自动回复id查询某个网关的消息 -->
+  <select id="findByResId" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_WX_AUTORESCONTENT
+    where res_id = #{resId,jdbcType=VARCHAR}
+    and status=0
+    order by content_seq asc
+  </select>
+  
+  <!-- 保存 -->
+  <insert id="saveOne" parameterType="wxAutoResContent" >
+    insert into T_WX_AUTORESCONTENT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="contentId != null" >
+        CONTENT_ID,
+      </if>
+      <if test="resId != null" >
+        RES_ID,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="picUrl != null" >
+        PIC_URL,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="contentSeq !=null">
+      	content_seq,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="createUser != null" >
+        createUser,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="updateUser != null" >
+        updateUser,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="contentId != null" >
+        #{contentId,jdbcType=VARCHAR},
+      </if>
+      <if test="resId != null" >
+        #{resId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="contentSeq !=null">
+      	#{contentSeq},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DECIMAL},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 修改 -->
+  <update id="eidtById" parameterType="wxAutoResContent" >
+    update T_WX_AUTORESCONTENT
+    <set >
+      <if test="resId != null" >
+        RES_ID = #{resId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        PIC_URL = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="contentSeq !=null">
+      	content_Seq=#{contentSeq},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=DECIMAL},
+      </if>
+      <if test="updateUser != null" >
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CONTENT_ID = #{contentId,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="deleteByResId">
+      DELETE FROM T_WX_AUTORESCONTENT WHERE  RES_ID = #{resId}
+  </delete>
+</mapper>

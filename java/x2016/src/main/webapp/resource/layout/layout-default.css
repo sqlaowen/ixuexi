@@ -1,0 +1,19 @@
+.ui-layout-toggler-west-open    {
+    background: url(images/toggle-lt.gif) no-repeat center right !important;
+}
+.ui-layout-toggler-west-closed   {
+    background: url(images/toggle-rt.gif) no-repeat center left !important;
+}
+.ui-layout-toggler-north-open {
+    background: url(images/toggle-up.gif) no-repeat center right !important;
+}
+.ui-layout-toggler-north-closed {
+    background: url(images/toggle-dn.gif) no-repeat center right !important;
+}
+
+/* .ui-layout-resizer-west    {
+    background: url(images/resizable-w.gif) no-repeat center right !important;
+}
+.ui-layout-resizer-north {
+    background: url(images/resizable-n.gif) repeat center right !important;
+} */

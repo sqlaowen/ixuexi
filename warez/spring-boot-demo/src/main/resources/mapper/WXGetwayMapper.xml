@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.WXGetwayMapper">
+
+    <resultMap id="BaseResultMap" type="wxGetway">
+        <id column="wx_id" jdbcType="VARCHAR" property="wxId"/>
+        <result column="company_id" jdbcType="VARCHAR" property="companyId"/>
+        <result column="wx_name" jdbcType="VARCHAR" property="wxName"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="app_secret" jdbcType="VARCHAR" property="appSecret"/>
+        <result column="access_token" jdbcType="VARCHAR" property="accessToken"/>
+        <result column="ak_time_out" jdbcType="BIGINT" property="akTimeOut"/>
+        <result column="wx_token" jdbcType="VARCHAR" property="wxToken"/>
+        <result column="wx_type" jdbcType="INTEGER" property="wxType"/>
+        <result column="wx_ghid" jdbcType="VARCHAR" property="wxGhid"/>
+        <result column="wx_mailbox" jdbcType="VARCHAR" property="wxMailbox"/>
+        <result column="wx_no" jdbcType="VARCHAR" property="wxNo"/>
+        <result column="wx_state" jdbcType="INTEGER" property="wxState"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="edit_time" jdbcType="TIMESTAMP" property="editTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        wx_id, company_id, wx_name, app_id, app_secret, access_token, ak_time_out, wx_token,
+        wx_type, wx_ghid, wx_mailbox, wx_no, wx_state, create_time, edit_time
+    </sql>
+
+    <!-- 通过原始id查询 -->
+    <select id="findByGhid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wx_getway
+        where wx_ghid = #{wxGhid,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laowen.dao.WXGetwayMapper">
+
+    <resultMap id="BaseResultMap" type="wxGetway">
+        <id column="wx_id" jdbcType="VARCHAR" property="wxId"/>
+        <result column="company_id" jdbcType="VARCHAR" property="companyId"/>
+        <result column="wx_name" jdbcType="VARCHAR" property="wxName"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="app_secret" jdbcType="VARCHAR" property="appSecret"/>
+        <result column="access_token" jdbcType="VARCHAR" property="accessToken"/>
+        <result column="ak_time_out" jdbcType="BIGINT" property="akTimeOut"/>
+        <result column="wx_token" jdbcType="VARCHAR" property="wxToken"/>
+        <result column="wx_type" jdbcType="INTEGER" property="wxType"/>
+        <result column="wx_ghid" jdbcType="VARCHAR" property="wxGhid"/>
+        <result column="wx_mailbox" jdbcType="VARCHAR" property="wxMailbox"/>
+        <result column="wx_no" jdbcType="VARCHAR" property="wxNo"/>
+        <result column="wx_state" jdbcType="INTEGER" property="wxState"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="edit_time" jdbcType="TIMESTAMP" property="editTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        wx_id, company_id, wx_name, app_id, app_secret, access_token, ak_time_out, wx_token,
+        wx_type, wx_ghid, wx_mailbox, wx_no, wx_state, create_time, edit_time
+    </sql>
+
+    <!-- 通过id查询 -->
+    <select id="findById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wx_getway
+        where wx_id = #{wxId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 通过原始id查询 -->
+    <select id="findByGhid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wx_getway
+        where wx_ghid = #{wxGhid,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 通过appid和系统分配的companyId查询 -->
+    <select id="findByAppIdAndCompanyId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wx_getway
+        where company_id = #{companyId,jdbcType=VARCHAR}
+        and app_id = #{appId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertOne" parameterType="wxGetway">
+        insert into wx_getway
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="wxId != null">
+                wx_id,
+            </if>
+            <if test="companyId != null">
+                company_id,
+            </if>
+            <if test="wxName != null">
+                wx_name,
+            </if>
+            <if test="appId != null">
+                app_id,
+            </if>
+            <if test="appSecret != null">
+                app_secret,
+            </if>
+            <if test="accessToken != null">
+                access_token,
+            </if>
+            <if test="akTimeOut != null">
+                ak_time_out,
+            </if>
+            <if test="wxToken != null">
+                wx_token,
+            </if>
+            <if test="wxType != null">
+                wx_type,
+            </if>
+            <if test="wxGhid != null">
+                wx_ghid,
+            </if>
+            <if test="wxMailbox != null">
+                wx_mailbox,
+            </if>
+            <if test="wxNo != null">
+                wx_no,
+            </if>
+            <if test="wxState != null">
+                wx_state,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="editTime != null">
+                edit_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="wxId != null">
+                #{wxId,jdbcType=VARCHAR},
+            </if>
+            <if test="companyId != null">
+                #{companyId,jdbcType=VARCHAR},
+            </if>
+            <if test="wxName != null">
+                #{wxName,jdbcType=VARCHAR},
+            </if>
+            <if test="appId != null">
+                #{appId,jdbcType=VARCHAR},
+            </if>
+            <if test="appSecret != null">
+                #{appSecret,jdbcType=VARCHAR},
+            </if>
+            <if test="accessToken != null">
+                #{accessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="akTimeOut != null">
+                #{akTimeOut,jdbcType=BIGINT},
+            </if>
+            <if test="wxToken != null">
+                #{wxToken,jdbcType=VARCHAR},
+            </if>
+            <if test="wxType != null">
+                #{wxType,jdbcType=INTEGER},
+            </if>
+            <if test="wxGhid != null">
+                #{wxGhid,jdbcType=VARCHAR},
+            </if>
+            <if test="wxMailbox != null">
+                #{wxMailbox,jdbcType=VARCHAR},
+            </if>
+            <if test="wxNo != null">
+                #{wxNo,jdbcType=VARCHAR},
+            </if>
+            <if test="wxState != null">
+                #{wxState,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="editTime != null">
+                #{editTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="wxGetway">
+        update wx_getway
+        <set>
+            <if test="companyId != null">
+                company_id = #{companyId,jdbcType=VARCHAR},
+            </if>
+            <if test="wxName != null">
+                wx_name = #{wxName,jdbcType=VARCHAR},
+            </if>
+            <if test="appId != null">
+                app_id = #{appId,jdbcType=VARCHAR},
+            </if>
+            <if test="appSecret != null">
+                app_secret = #{appSecret,jdbcType=VARCHAR},
+            </if>
+            <if test="accessToken != null">
+                access_token = #{accessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="akTimeOut != null">
+                ak_time_out = #{akTimeOut,jdbcType=BIGINT},
+            </if>
+            <if test="wxToken != null">
+                wx_token = #{wxToken,jdbcType=VARCHAR},
+            </if>
+            <if test="wxType != null">
+                wx_type = #{wxType,jdbcType=INTEGER},
+            </if>
+            <if test="wxGhid != null">
+                wx_ghid = #{wxGhid,jdbcType=VARCHAR},
+            </if>
+            <if test="wxMailbox != null">
+                wx_mailbox = #{wxMailbox,jdbcType=VARCHAR},
+            </if>
+            <if test="wxNo != null">
+                wx_no = #{wxNo,jdbcType=VARCHAR},
+            </if>
+            <if test="wxState != null">
+                wx_state = #{wxState,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="editTime != null">
+                edit_time = #{editTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where wx_id = #{wxId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

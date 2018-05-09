@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--配置文件占位符 -->
+	<import resource="classpath:env/property_configurer.xml" />
+
+	<!--数据连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="3" />
+		<property name="minIdle" value="3" />
+		<property name="maxActive" value="20" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<!-- 配置监控统计拦截的filters -->
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!--事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 定义拦截器，用来指定事务属性、级别和异常处理 -->
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="save*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="edit*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="del*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="*">PROPAGATION_REQUIRED,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 用来定义哪些类需要事务管理 spring事务动态代理类 BeanNameAutoProxyCreator 根据类名自动代理，接受表达式 -->
+	<bean id="beanProxy" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<value>*Service</value>
+		</property>
+		<property name="interceptorNames">
+			<value>transactionInterceptor</value>
+		</property>
+	</bean>
+
+	<!-- sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:notenv/mybatis-config.xml" />
+		<property name="plugins">
+			<bean class="com.github.pagehelper.PageHelper">
+				<property name="properties">
+					<value>
+						dialect=mysql
+						reasonable=true
+						pageSizeZero=true
+					</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- ================================================================== -->
+	<!-- ================================================================== -->
+	
+	<!-- //////////////////////支付相关  begin////////////////////// -->
+	<!-- 用户 -->
+	<bean id="sysUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.authc.single.dao.SysUserMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="sysUserService" class="com.authc.single.impl.SysUserServiceImpl">
+		<property name="sysUserMapper" ref="sysUserMapper" />
+	</bean>
+	<!-- 角色-->
+	<bean id="sysRoleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.authc.single.dao.SysRoleMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="sysRoleService" class="com.authc.single.impl.SysRoleServiceImpl">
+		<property name="sysRoleMapper" ref="sysRoleMapper" />
+	</bean>
+	<!-- 资源(菜单、权限)-->
+	<bean id="sysPermMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.authc.single.dao.SysPermissionMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="sysPermService" class="com.authc.single.impl.SysPermissionServiceImpl">
+		<property name="sysPermMapper" ref="sysPermMapper" />
+	</bean>
+	<!-- 区域-->
+	<bean id="sysAreaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.authc.single.dao.SysAreaMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="sysAreaService" class="com.authc.single.impl.SysAreaServiceImpl">
+		<property name="sysAreaMapper" ref="sysAreaMapper" />
+	</bean>
+	<!-- 用户ref角色 -->
+	<bean id="refUserRoleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.authc.single.dao.RefUserRoleMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="refUserRoleService" class="com.authc.single.impl.RefUserRoleServiceImpl">
+		<property name="refUserRoleMapper" ref="refUserRoleMapper" />
+	</bean>
+	<!-- 角色ref资源 -->
+	<bean id="refRolePermMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.authc.single.dao.RefRolePermMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="refRolePermService" class="com.authc.single.impl.RefRolePermServiceImpl">
+		<property name="refRolePermMapper" ref="refRolePermMapper" />
+	</bean>
+	
+	<!-- /////////////组合服务///////////// -->
+	
+	<!-- //////////////////////支付相关  end////////////////////// -->
+</beans>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.single.dao.AliReturnMapper" >
+
+  <resultMap id="BaseResultMap" type="aliReturn" >
+    <id column="ali_notify_id" jdbcType="VARCHAR" property="aliNotifyId" />
+    <result column="merge_payment_id" jdbcType="VARCHAR" property="mergePaymentId" />
+    <result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+    <result column="is_success" jdbcType="VARCHAR" property="isSuccess" />
+    <result column="sign_type" jdbcType="VARCHAR" property="signType" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="payment_type" jdbcType="VARCHAR" property="paymentType" />
+    <result column="exterface" jdbcType="VARCHAR" property="exterface" />
+    <result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="trade_status" jdbcType="VARCHAR" property="tradeStatus" />
+    <result column="notify_id" jdbcType="VARCHAR" property="notifyId" />
+    <result column="notify_time" jdbcType="TIMESTAMP" property="notifyTime" />
+    <result column="notify_type" jdbcType="VARCHAR" property="notifyType" />
+    <result column="seller_email" jdbcType="VARCHAR" property="sellerEmail" />
+    <result column="buyer_email" jdbcType="VARCHAR" property="buyerEmail" />
+    <result column="seller_id" jdbcType="VARCHAR" property="sellerId" />
+    <result column="buyer_id" jdbcType="VARCHAR" property="buyerId" />
+    <result column="total_fee" jdbcType="INTEGER" property="totalFee" />
+    <result column="body" jdbcType="VARCHAR" property="body" />
+    <result column="bank_seq_no" jdbcType="VARCHAR" property="bankSeqNo" />
+    <result column="extra_common_param" jdbcType="VARCHAR" property="extraCommonParam" />
+    <result column="return_value" jdbcType="VARCHAR" property="returnValue" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ali_notify_id, merge_payment_id, out_trade_no, is_success, sign_type, sign, subject, payment_type, exterface, 
+    trade_no, trade_status, notify_id, notify_time, notify_type, seller_email, buyer_email, 
+    seller_id, buyer_id, total_fee, body, bank_seq_no, extra_common_param, return_value, 
+    create_time, create_user
+  </sql>
+  
+  <insert id="saveOne" parameterType="aliReturn" >
+    insert into pay_ali_return
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="aliNotifyId != null">
+        ali_notify_id,
+      </if>
+      <if test="mergePaymentId != null">
+        merge_payment_id,
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no,
+      </if>
+      <if test="isSuccess != null">
+        is_success,
+      </if>
+      <if test="signType != null">
+        sign_type,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="paymentType != null">
+        payment_type,
+      </if>
+      <if test="exterface != null">
+        exterface,
+      </if>
+      <if test="tradeNo != null">
+        trade_no,
+      </if>
+      <if test="tradeStatus != null">
+        trade_status,
+      </if>
+      <if test="notifyId != null">
+        notify_id,
+      </if>
+      <if test="notifyTime != null">
+        notify_time,
+      </if>
+      <if test="notifyType != null">
+        notify_type,
+      </if>
+      <if test="sellerEmail != null">
+        seller_email,
+      </if>
+      <if test="buyerEmail != null">
+        buyer_email,
+      </if>
+      <if test="sellerId != null">
+        seller_id,
+      </if>
+      <if test="buyerId != null">
+        buyer_id,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="body != null">
+        body,
+      </if>
+      <if test="bankSeqNo != null">
+        bank_seq_no,
+      </if>
+      <if test="extraCommonParam != null">
+        extra_common_param,
+      </if>
+      <if test="returnValue != null">
+        return_value,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="aliNotifyId != null">
+        #{aliNotifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="mergePaymentId != null">
+        #{mergePaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null">
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="isSuccess != null">
+        #{isSuccess,jdbcType=VARCHAR},
+      </if>
+      <if test="signType != null">
+        #{signType,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentType != null">
+        #{paymentType,jdbcType=VARCHAR},
+      </if>
+      <if test="exterface != null">
+        #{exterface,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null">
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStatus != null">
+        #{tradeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyId != null">
+        #{notifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyTime != null">
+        #{notifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notifyType != null">
+        #{notifyType,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerEmail != null">
+        #{sellerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerEmail != null">
+        #{buyerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null">
+        #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerId != null">
+        #{buyerId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="body != null">
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="bankSeqNo != null">
+        #{bankSeqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="extraCommonParam != null">
+        #{extraCommonParam,jdbcType=VARCHAR},
+      </if>
+      <if test="returnValue != null">
+        #{returnValue,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

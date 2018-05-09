@@ -1,0 +1,67 @@
+一、将 config.json 放到 src/main/resources中
+
+二、添加  cn.ziran.xupload.controller.UEController 初始化 UE
+
+三、修改 com.baidu.ueditor.ConfigManager 
+private ConfigManager ( String rootPath, String contextPath, String uri ) throws FileNotFoundException, IOException {
+		
+		rootPath = rootPath.replace( "\\", "/" );
+		
+		this.rootPath = rootPath;
+		this.contextPath = contextPath;
+		
+//		if ( contextPath.length() > 0 ) {
+//			this.originalPath = this.rootPath + uri.substring( contextPath.length() );
+//		} else {
+//			this.originalPath = this.rootPath + uri;
+//		}
+		this.originalPath = this.rootPath + "WEB-INF/classes/"+ configFileName;
+		
+		this.initEnv();
+		
+	}
+
+
+四、重写文件保存方法com.baidu.ueditor.upload.BinaryUploader.save()
+//重写文件保存方法
+  public static final State save(HttpServletRequest request,
+      Map<String, Object> conf) {
+
+  try {
+      MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+      MultipartFile multipartFile = multipartRequest.getFile(conf.get("fieldName").toString());
+
+      String savePath = (String) conf.get("savePath");
+      String originFileName = multipartFile.getOriginalFilename();
+      String suffix = FileType.getSuffixByFilename(originFileName);
+
+      originFileName = originFileName.substring(0,originFileName.length() - suffix.length());
+      savePath = savePath + suffix;
+
+      long maxSize = ((Long) conf.get("maxSize")).longValue();
+
+      if (!validType(suffix, (String[]) conf.get("allowFiles"))) {
+          return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
+      }
+
+      savePath = PathFormat.parse(savePath, originFileName);
+      String prePath=(String) conf.get("rootPath");
+      if(prePath.endsWith("/"))
+        prePath=prePath.substring(0, prePath.length()-1);
+      String physicalPath = prePath + savePath;
+      State storageState = StorageManager.saveFileByInputStream(multipartFile.getInputStream(),physicalPath, maxSize);
+
+      if (storageState.isSuccess()) {
+          storageState.putInfo("url", PathFormat.format(savePath));
+          storageState.putInfo("type", suffix);
+          storageState.putInfo("original", originFileName + suffix);
+      }
+
+      return storageState;
+
+  }catch (Exception e) {
+      e.printStackTrace();
+      System.out.println(e.getMessage());
+  }
+  return new BaseState(false, AppInfo.IO_ERROR);
+}

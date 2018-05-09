@@ -1,0 +1,60 @@
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'v_rand'))
+DROP VIEW v_rand
+GO
+
+--=====================================
+--2014-09-19
+--取随机数的视图
+--=====================================
+CREATE VIEW v_rand
+AS
+SELECT re=STUFF(RAND(),1,2,'')
+GO
+
+------------------------------------------------------
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'fn_rand') AND type IN (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION fn_rand
+GO
+
+--=====================================
+--2014-09-19
+--生成随机编号的函数
+--=====================================
+CREATE FUNCTION fn_rand(@BHLen INT)
+RETURNS VARCHAR(50)
+AS
+BEGIN
+	DECLARE @r VARCHAR(50)
+	IF NOT(ISNULL(@BHLen,0) BETWEEN 1 AND 50)
+		SET @BHLen=10
+
+	SELECT @r=CHAR(
+			CASE WHEN SUBSTRING(re,1,1)>5 THEN 97 ELSE 65 END
+			+(SUBSTRING(re,1,1)
+			+SUBSTRING(re,2,1)
+			+SUBSTRING(re,3,1))%26)
+		+CHAR(
+			CASE WHEN SUBSTRING(re,4,1)>5 THEN 97 ELSE 65 END
+			+(SUBSTRING(re,4,1)
+			+SUBSTRING(re,5,1)
+			+SUBSTRING(re,6,1))%26)
+	FROM v_RAND
+	WHILE LEN(@r)<@BHLen
+		SELECT @r=@r+CHAR(
+				CASE WHEN SUBSTRING(re,1,1)>5 THEN 97 ELSE 65 END
+				+(SUBSTRING(re,1,1)
+				+SUBSTRING(re,2,1)
+				+SUBSTRING(re,3,1))%26)
+			+CHAR(
+				CASE WHEN SUBSTRING(re,4,1)>5 THEN 97 ELSE 65 END
+				+(SUBSTRING(re,4,1)
+				+SUBSTRING(re,5,1)
+				+SUBSTRING(re,6,1))%26)
+		FROM v_RAND
+	RETURN(LEFT(@r,@BHLen))
+END
+
+GO
+
+

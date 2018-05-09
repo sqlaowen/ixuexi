@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WXGetwayMapper" >
+  <resultMap id="BaseResultMap" type="wxGetway" >
+    <id column="WX_ID" property="wxId" jdbcType="VARCHAR" />
+    <result column="WX_NAME" property="wxName" jdbcType="VARCHAR" />
+    <result column="APP_ID" property="appId" jdbcType="VARCHAR" />
+    <result column="APP_SECRET" property="appSecret" jdbcType="VARCHAR" />
+    <result column="ACCESS_TOKEN" property="accessToken" jdbcType="VARCHAR" />
+    <result column="AK_TIME_OUT" property="akTimeOut" jdbcType="DECIMAL" />
+    <result column="WX_TOKEN" property="wxToken" jdbcType="VARCHAR" />
+    <result column="WX_TYPE" property="wxType" jdbcType="DECIMAL" />
+    <result column="WX_GHID" property="wxGhid" jdbcType="VARCHAR" />
+    <result column="WX_MAILBOX" property="wxMailbox" jdbcType="VARCHAR" />
+    <result column="WX_NO" property="wxNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wx_id, wx_name, app_id, app_secret, access_token, ak_time_out, wx_token, wx_type, 
+    wx_ghid, wx_mailbox, wx_no
+  </sql>
+  
+  <!-- 根据id查询 -->
+  <select id="findById" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_WX_GETWAY
+    where WX_ID = #{wxId,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="saveOne" parameterType="wxGetway" >
+    insert into T_WX_GETWAY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="wxId != null" >
+        WX_ID,
+      </if>
+      <if test="wxName != null" >
+        WX_NAME,
+      </if>
+      <if test="appId != null" >
+        APP_ID,
+      </if>
+      <if test="appSecret != null" >
+        APP_SECRET,
+      </if>
+      <if test="accessToken != null" >
+        ACCESS_TOKEN,
+      </if>
+      <if test="akTimeOut != null" >
+        AK_TIME_OUT,
+      </if>
+      <if test="wxToken != null" >
+        WX_TOKEN,
+      </if>
+      <if test="wxType != null" >
+        WX_TYPE,
+      </if>
+      <if test="wxGhid != null" >
+        WX_GHID,
+      </if>
+      <if test="wxMailbox != null" >
+        WX_MAILBOX,
+      </if>
+      <if test="wxNo != null" >
+        WX_NO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="wxId != null" >
+        #{wxId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxName != null" >
+        #{wxName,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="appSecret != null" >
+        #{appSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null" >
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="akTimeOut != null" >
+        #{akTimeOut,jdbcType=DECIMAL},
+      </if>
+      <if test="wxToken != null" >
+        #{wxToken,jdbcType=VARCHAR},
+      </if>
+      <if test="wxType != null" >
+        #{wxType,jdbcType=DECIMAL},
+      </if>
+      <if test="wxGhid != null" >
+        #{wxGhid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxMailbox != null" >
+        #{wxMailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNo != null" >
+        #{wxNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="editById" parameterType="wxGetway" >
+    update T_WX_GETWAY
+    <set >
+      <if test="wxName != null" >
+        WX_NAME = #{wxName,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null" >
+        APP_ID = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="appSecret != null" >
+        APP_SECRET = #{appSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null" >
+        ACCESS_TOKEN = #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="akTimeOut != null" >
+        AK_TIME_OUT = #{akTimeOut,jdbcType=DECIMAL},
+      </if>
+      <if test="wxToken != null" >
+        WX_TOKEN = #{wxToken,jdbcType=VARCHAR},
+      </if>
+      <if test="wxType != null" >
+        WX_TYPE = #{wxType,jdbcType=DECIMAL},
+      </if>
+      <if test="wxGhid != null" >
+        WX_GHID = #{wxGhid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxMailbox != null" >
+        WX_MAILBOX = #{wxMailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNo != null" >
+        WX_NO = #{wxNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where WX_ID = #{wxId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+    http://code.alibabatech.com/schema/dubbo 
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+   	
+	<!--配置文件占位符 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="fileEncoding" value="utf-8" />
+		<property name="locations">
+			<list>
+				<value>classpath:dubbo.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="pay-notify-web" />
+
+	<dubbo:monitor protocol="registry" />
+	
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="${dubbo.registry.address}" protocol="zookeeper" />
+	
+	<dubbo:consumer timeout="100000" retries="0" check="false" connections="10" lazy="true" />
+	
+	<!-- 平台支付 -->
+	<dubbo:reference id="payService" interface="api.pay.combine.service.PayService" version="1.0" />
+	<!-- 平台通知 -->
+	<dubbo:reference id="payNotifyService" interface="api.pay.combine.service.PayNotifyService" version="1.0" />
+</beans>

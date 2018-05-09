@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <package name="com.laowen.entity" />
+    </typeAliases>
+    <mappers>
+        <mapper resource="mapper/WXFansMapper.xml"/>
+
+        <!-- 权限 -->
+        <mapper resource="mapper/RefRolePermMapper.xml" />
+        <mapper resource="mapper/RefUserRoleMapper.xml" />
+        <mapper resource="mapper/SysPermissionMapper.xml" />
+        <mapper resource="mapper/SysRoleMapper.xml" />
+        <mapper resource="mapper/SysUserMapper.xml" />
+
+    </mappers>
+</configuration>

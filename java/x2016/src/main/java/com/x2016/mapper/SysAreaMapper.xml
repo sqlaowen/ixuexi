@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.x2016.mapper.SysAreaMapper" >
+
+  <resultMap id="BaseResultMap" type="sysArea" >
+    <id column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="area_pid" jdbcType="INTEGER" property="areaPid" />
+    <result column="area_seq" jdbcType="INTEGER" property="areaSeq" />
+    <result column="area_level" jdbcType="INTEGER" property="areaLevel" />
+    <result column="area_status" jdbcType="INTEGER" property="areaStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    area_id, area_name, area_pid, area_seq, area_level, area_status, create_time, create_user, 
+    update_time, update_user
+  </sql>
+  
+  <insert id="save" parameterType="sysArea" >
+    insert into sys_area
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="areaName != null">
+        area_name,
+      </if>
+      <if test="areaPid != null">
+        area_pid,
+      </if>
+      <if test="areaSeq != null">
+        area_seq,
+      </if>
+      <if test="areaLevel != null">
+        area_level,
+      </if>
+      <if test="areaStatus != null">
+        area_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaPid != null">
+        #{areaPid,jdbcType=INTEGER},
+      </if>
+      <if test="areaSeq != null">
+        #{areaSeq,jdbcType=INTEGER},
+      </if>
+      <if test="areaLevel != null">
+        #{areaLevel,jdbcType=INTEGER},
+      </if>
+      <if test="areaStatus != null">
+        #{areaStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="findList"  parameterType="sysArea" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_area
+    <where>
+    	<if test="areaName!=null and areaName!=''">
+    		and area_name like #{areaName}
+    	</if>
+    	<if test="areaLevel!=null">
+    		and area_level=#{areaLevel}
+    	</if>
+    	<if test="areaStatus!=null">
+    		and area_status=#{areaStatus}
+    	</if>
+    </where>
+  </select>
+  
+</mapper>

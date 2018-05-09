@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pay.single.dao.PaymentRefMergeMapper">
+  
+  <resultMap id="BaseResultMap" type="paymentRefMerge">
+    <id column="ref_id" jdbcType="VARCHAR" property="refId" />
+    <result column="merge_payment_id" jdbcType="VARCHAR" property="mergePaymentId" />
+    <result column="payment_id" jdbcType="VARCHAR" property="paymentId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    ref_id, merge_payment_id, payment_id, create_time, create_user
+  </sql>
+  
+  <insert id="saveOne" parameterType="paymentRefMerge">
+    insert into pay_ref_merge_payment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="refId != null">
+        ref_id,
+      </if>
+      <if test="mergePaymentId != null">
+        merge_payment_id,
+      </if>
+      <if test="paymentId != null">
+        payment_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="refId != null">
+        #{refId,jdbcType=VARCHAR},
+      </if>
+      <if test="mergePaymentId != null">
+        #{mergePaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentId != null">
+        #{paymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

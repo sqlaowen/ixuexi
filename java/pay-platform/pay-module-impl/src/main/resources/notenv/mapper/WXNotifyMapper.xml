@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pay.single.dao.WXNotifyMapper">
+  
+  <resultMap id="BaseResultMap" type="wxNotify">
+    <id column="wx_notify_id" jdbcType="VARCHAR" property="wxNotifyId" />
+    <result column="merge_payment_id" jdbcType="VARCHAR" property="mergePaymentId" />
+    <result column="return_code" jdbcType="VARCHAR" property="returnCode" />
+    <result column="return_msg" jdbcType="VARCHAR" property="returnMsg" />
+    <result column="appid" jdbcType="VARCHAR" property="appid" />
+    <result column="mch_id" jdbcType="VARCHAR" property="mchId" />
+    <result column="device_info" jdbcType="VARCHAR" property="deviceInfo" />
+    <result column="nonce_str" jdbcType="VARCHAR" property="nonceStr" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="result_code" jdbcType="VARCHAR" property="resultCode" />
+    <result column="err_code" jdbcType="VARCHAR" property="errCode" />
+    <result column="err_code_des" jdbcType="VARCHAR" property="errCodeDes" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="is_subscribe" jdbcType="VARCHAR" property="isSubscribe" />
+    <result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
+    <result column="bank_type" jdbcType="VARCHAR" property="bankType" />
+    <result column="total_fee" jdbcType="INTEGER" property="totalFee" />
+    <result column="fee_type" jdbcType="VARCHAR" property="feeType" />
+    <result column="cash_fee" jdbcType="INTEGER" property="cashFee" />
+    <result column="cash_fee_type" jdbcType="VARCHAR" property="cashFeeType" />
+    <result column="coupon_fee" jdbcType="INTEGER" property="couponFee" />
+    <result column="coupon_count" jdbcType="INTEGER" property="couponCount" />
+    <result column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+    <result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+    <result column="attach" jdbcType="VARCHAR" property="attach" />
+    <result column="time_end" jdbcType="VARCHAR" property="timeEnd" />
+    <result column="notify_value" jdbcType="VARCHAR" property="notifyValue" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    wx_notify_id, merge_payment_id, return_code, return_msg, appid, mch_id, device_info, 
+    nonce_str, sign, result_code, err_code, err_code_des, openid, is_subscribe, trade_type, 
+    bank_type, total_fee, fee_type, cash_fee, cash_fee_type, coupon_fee, coupon_count, 
+    transaction_id, out_trade_no, attach, time_end, notify_value, create_time, create_user
+  </sql>
+  
+  <insert id="saveOne" parameterType="wxNotify">
+    insert into pay_wx_notify
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="wxNotifyId != null">
+        wx_notify_id,
+      </if>
+      <if test="mergePaymentId != null">
+        merge_payment_id,
+      </if>
+      <if test="returnCode != null">
+        return_code,
+      </if>
+      <if test="returnMsg != null">
+        return_msg,
+      </if>
+      <if test="appid != null">
+        appid,
+      </if>
+      <if test="mchId != null">
+        mch_id,
+      </if>
+      <if test="deviceInfo != null">
+        device_info,
+      </if>
+      <if test="nonceStr != null">
+        nonce_str,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="resultCode != null">
+        result_code,
+      </if>
+      <if test="errCode != null">
+        err_code,
+      </if>
+      <if test="errCodeDes != null">
+        err_code_des,
+      </if>
+      <if test="openid != null">
+        openid,
+      </if>
+      <if test="isSubscribe != null">
+        is_subscribe,
+      </if>
+      <if test="tradeType != null">
+        trade_type,
+      </if>
+      <if test="bankType != null">
+        bank_type,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="feeType != null">
+        fee_type,
+      </if>
+      <if test="cashFee != null">
+        cash_fee,
+      </if>
+      <if test="cashFeeType != null">
+        cash_fee_type,
+      </if>
+      <if test="couponFee != null">
+        coupon_fee,
+      </if>
+      <if test="couponCount != null">
+        coupon_count,
+      </if>
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no,
+      </if>
+      <if test="attach != null">
+        attach,
+      </if>
+      <if test="timeEnd != null">
+        time_end,
+      </if>
+      <if test="notifyValue != null">
+        notify_value,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="wxNotifyId != null">
+        #{wxNotifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="mergePaymentId != null">
+        #{mergePaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCode != null">
+        #{returnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="returnMsg != null">
+        #{returnMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null">
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null">
+        #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceInfo != null">
+        #{deviceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="nonceStr != null">
+        #{nonceStr,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCode != null">
+        #{resultCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errCode != null">
+        #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errCodeDes != null">
+        #{errCodeDes,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="isSubscribe != null">
+        #{isSubscribe,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeType != null">
+        #{tradeType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankType != null">
+        #{bankType,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="feeType != null">
+        #{feeType,jdbcType=VARCHAR},
+      </if>
+      <if test="cashFee != null">
+        #{cashFee,jdbcType=INTEGER},
+      </if>
+      <if test="cashFeeType != null">
+        #{cashFeeType,jdbcType=VARCHAR},
+      </if>
+      <if test="couponFee != null">
+        #{couponFee,jdbcType=INTEGER},
+      </if>
+      <if test="couponCount != null">
+        #{couponCount,jdbcType=INTEGER},
+      </if>
+      <if test="transactionId != null">
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null">
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="attach != null">
+        #{attach,jdbcType=VARCHAR},
+      </if>
+      <if test="timeEnd != null">
+        #{timeEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyValue != null">
+        #{notifyValue,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

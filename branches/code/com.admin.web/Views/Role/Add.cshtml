@@ -1,0 +1,76 @@
+﻿@model com.admin.poco.SysRole
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutAdd2015.cshtml";
+}
+
+<!-- 操作 -->
+<div class="row-fluid">
+    <div class="span12 text-right" style="margin-bottom:5px;">
+        <input type="button" class="btn btn-info btn-sm" value="保存" name="btnSave" />
+        <input type="button" class="btn btn-info btn-sm" value="返回" name="btnBack" />
+    </div>
+</div>
+
+<!-- 表单 -->
+<div class="row-fluid">
+    <div class="span12 table-responsive">
+        <form role="form" id="form" class="form-horizontal">
+            <table class="table table-striped table-bordered table-hover">
+                <tr>
+                    <td>
+                        角色名：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Name" name="Name" />
+                    </td>
+                    <td>
+                        备注：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Note" name="Note" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        状态：
+                    </td>
+                    <td>
+                        <select name="State" class="col-xs-10">
+                            <option value="1" @(Model.State != 0 ? "selected=selected" : "")>可用</option>
+                            <option value="0" @(Model.State == 0 ? "selected=selected" : "")>禁用</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <input type="hidden" value="@Model.RoleId" name="RoleId" />
+            <input type="hidden" value="@Model.UpdateUser" name="UpdateUser" />
+            <input type="hidden" value="@Model.UpdateTime" name="UpdateTime" />
+            <input type="hidden" value="@Model.CreateUser" name="CreateUser" />
+            <input type="hidden" value="@Model.CreateTime" name="CreateTime" />
+
+        </form>
+    </div>
+</div>
+
+@section script{
+    <script type="text/javascript">
+        //保存
+        $('input[name="btnSave"]').on('click', function () {
+            $.post('/Role/Save/', $('#form').getFormsValue(), function (rev) {
+                if (rev.error == 0) {
+                    location.href = decodeURIComponent(getUrlParam('refUrl'));
+                }
+                else {
+                    top.warn('操作失败！请稍后再试');
+                }
+            }, 'json');
+        });
+        //返回
+        $('input[name="btnBack"]').on('click', function () {
+            location.href = decodeURIComponent(getUrlParam('refUrl'));
+        });
+    </script>
+}

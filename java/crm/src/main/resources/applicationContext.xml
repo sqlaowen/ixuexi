@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    
+	<!--配置文件占位符 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:dubbo.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="UTF-8" />
+	</bean>
+	
+	<context:annotation-config />
+	
+	<!-- 组件扫描,不扫描Controller -->
+	<context:component-scan base-package="com.x2016.*">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="app-authc-module" />
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="${dubbo.registry.address}" protocol="zookeeper" />
+	<dubbo:consumer timeout="50000" retries="0" check="false" connections="10" lazy="true" version="1.0" />
+	
+	<!-- 需要暴露的服务接口  -->
+	<!-- 用户 -->
+	<dubbo:reference id="sysUserService" interface="api.authc.single.service.SysUserService" />
+	
+	<!-- 角色 -->
+	<dubbo:reference id="sysRoleService" interface="api.authc.single.service.SysRoleService" />
+	
+	<!-- 资源(菜单、权限) -->
+	<dubbo:reference id="sysPermService" interface="api.authc.single.service.SysPermissionService" />
+	
+	<!-- 区域 -->
+	<dubbo:reference id="sysAreaService" interface="api.authc.single.service.SysAreaService" />
+	
+	<!-- 用户ref角色 -->
+	<dubbo:reference id="refUserRoleService" interface="api.authc.single.service.RefUserRoleService" />
+	
+	<!-- 角色ref资源 -->
+	<dubbo:reference id="refRolePermService" interface="api.authc.single.service.RefRolePermService" />
+	
+</beans>
+

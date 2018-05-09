@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pay.single.dao.PaymentGatewayMapper">
+  
+  <resultMap id="BaseResultMap" type="paymentGateway">
+    <id column="gateway_id" jdbcType="VARCHAR" property="gatewayId" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="gateway_name" jdbcType="VARCHAR" property="gatewayName" />
+    <result column="gateway_code" jdbcType="VARCHAR" property="gatewayCode" />
+    <result column="gateway_state" jdbcType="INTEGER" property="gatewayState" />
+    <result column="gateway_key" jdbcType="VARCHAR" property="gatewayKey" />
+    <result column="gateway_account" jdbcType="VARCHAR" property="gatewayAccount" />
+    <result column="gateway_user_name" jdbcType="VARCHAR" property="gatewayUserName" />
+    <result column="return_url" jdbcType="VARCHAR" property="returnUrl" />
+    <result column="notify_url" jdbcType="VARCHAR" property="notifyUrl" />
+    <result column="pay_api" jdbcType="VARCHAR" property="payApi" />
+    <result column="query_api" jdbcType="VARCHAR" property="queryApi" />
+    <result column="close_api" jdbcType="VARCHAR" property="closeApi" />
+    <result column="refund_api" jdbcType="VARCHAR" property="refundApi" />
+    <result column="verify_api" jdbcType="VARCHAR" property="verifyApi"/>
+    <result column="public_key" jdbcType="VARCHAR" property="publicKey"/>
+    <result column="cert_path" jdbcType="VARCHAR" property="certPath"/>
+    <result column="sign_type" jdbcType="VARCHAR" property="signType"/>
+    <result column="gateway_version" jdbcType="VARCHAR" property="gatewayVersion" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    gateway_id, merchant_id, gateway_name, gateway_code, gateway_state, gateway_key, 
+    gateway_account, gateway_user_name, return_url, notify_url, pay_api, query_api, close_api, 
+    refund_api,verify_api,public_key, cert_path, sign_type, gateway_version, 
+    create_time, create_user, update_time, update_user
+  </sql>
+  
+  <!-- 根据id查询 -->
+  <select id="findById" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pay_payment_gateway
+    where gateway_id = #{gatewayId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据网关编码和商户id查询 -->
+  <select id="findByCodeAndMerchantId" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from pay_payment_gateway
+    <where>
+    	<if test="merchantId != null">
+    		and merchant_id = #{merchantId}
+    	</if>
+    	<if test="gatewayCode != null">
+    		and gateway_code = #{gatewayCode}
+    	</if>
+    </where>
+  </select>
+ 
+ </mapper>

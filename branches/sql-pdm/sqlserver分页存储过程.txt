@@ -1,0 +1,43 @@
+if exists (
+SELECT * FROM sysobjects WHERE xtype='P' AND id=OBJECT_ID('pro_paging'))
+DROP PROCEDURE [dbo].[pro_paging]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		
+-- Create date: 2014-09-11
+-- Description:	分页
+-- =============================================
+CREATE PROCEDURE [dbo].[pro_paging]
+	@table NVARCHAR(4000)		--表
+	,@field NVARCHAR(4000)='*'	--字段
+	,@where NVARCHAR(4000)=''	--条件
+	,@sort NVARCHAR(4000)		--排序
+	,@psize INT =10				--每页大小
+	,@pindex INT=1				--当前页
+	,@rownum INT =0 OUTPUT		--总数据量
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+    DECLARE @sql NVARCHAR(4000)
+	SET @sql=N'select @rownum=count(1) from '+@table+' where 1=1 '+@where
+	EXEC sys.sp_executesql @sql,N'@rownum int OUTPUT',@rownum OUTPUT
+	DECLARE @snum INT
+	DECLARE @enum INT
+	SET @snum=(@pindex-1)*@psize+1
+	SET @enum=@psize*@pindex
+	SET @sql=N'select * from ('
+	+N'select '+@field+N',ROW_NUMBER() OVER(ORDER BY '+@sort+N' ) [_rnum] from '+@table
+	+N' where 1=1 '+@where+' ) _table where _rnum between '+CONVERT(VARCHAR(100),@snum)+N' and '+CONVERT(VARCHAR(100),@enum)
+	EXEC sys.sp_executesql @sql
+END
+
+GO

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<package name="com.authc.single.bean" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="notenv/mapper/RefRolePermMapper.xml" />
+		<mapper resource="notenv/mapper/RefUserRoleMapper.xml" />
+		<mapper resource="notenv/mapper/SysAreaMapper.xml" />
+		<mapper resource="notenv/mapper/SysPermissionMapper.xml" />
+		<mapper resource="notenv/mapper/SysRoleMapper.xml" />
+		<mapper resource="notenv/mapper/SysUserMapper.xml" />
+	</mappers>
+</configuration>

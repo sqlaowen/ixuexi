@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.warez.dao.ECGoodsMapper">
+
+    <resultMap id="BaseResultMap" type="ecGoods">
+        <id column="goods_id" jdbcType="VARCHAR" property="goodsId"/>
+        <result column="platform_id" jdbcType="INTEGER" property="platformId"/>
+        <result column="sku_id" jdbcType="VARCHAR" property="skuId"/>
+        <result column="sku_img" jdbcType="VARCHAR" property="skuImg"/>
+        <result column="sku_url" jdbcType="VARCHAR" property="skuUrl"/>
+        <result column="sku_note" jdbcType="VARCHAR" property="skuNote"/>
+        <result column="sku_state" jdbcType="INTEGER" property="skuState"/>
+        <result column="sku_vender" jdbcType="VARCHAR" property="skuVender"/>
+        <result column="sku_shop" jdbcType="VARCHAR" property="skuShop"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    goods_id, platform_id, sku_id, sku_img, sku_url, sku_note, sku_state, sku_vender, 
+    sku_shop, create_time, create_user, update_time, update_user
+  </sql>
+
+    <!-- 据skuId和platformId查 -->
+    <select id="selectBySKUAndPlatform" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ec_goods
+        <where>
+            <if test="skuId != null">
+                and sku_id = #{skuId,jdbcType=VARCHAR}
+            </if>
+            <if test="platformId != null">
+                and platform_id = #{platformId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <!-- 分页用于更新价格 -->
+    <select id="selectList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ec_goods
+        where sku_state = 0
+    </select>
+
+    <!-- 添加 -->
+    <insert id="insertOne" parameterType="ecGoods">
+        insert into ec_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="platformId != null">
+                platform_id,
+            </if>
+            <if test="skuId != null">
+                sku_id,
+            </if>
+            <if test="skuImg != null">
+                sku_img,
+            </if>
+            <if test="skuUrl != null">
+                sku_url,
+            </if>
+            <if test="skuNote != null">
+                sku_note,
+            </if>
+            <if test="skuState != null">
+                sku_state,
+            </if>
+            <if test="skuVender != null">
+                sku_vender,
+            </if>
+            <if test="skuShop != null">
+                sku_shop,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=VARCHAR},
+            </if>
+            <if test="platformId != null">
+                #{platformId,jdbcType=INTEGER},
+            </if>
+            <if test="skuId != null">
+                #{skuId,jdbcType=VARCHAR},
+            </if>
+            <if test="skuImg != null">
+                #{skuImg,jdbcType=VARCHAR},
+            </if>
+            <if test="skuUrl != null">
+                #{skuUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="skuNote != null">
+                #{skuNote,jdbcType=VARCHAR},
+            </if>
+            <if test="skuState != null">
+                #{skuState,jdbcType=INTEGER},
+            </if>
+            <if test="skuVender != null">
+                #{skuVender,jdbcType=VARCHAR},
+            </if>
+            <if test="skuShop != null">
+                #{skuShop,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateById" parameterType="ecGoods">
+        update ec_goods
+        <set>
+            <if test="skuImg != null">
+                sku_img = #{skuImg,jdbcType=VARCHAR},
+            </if>
+            <if test="skuUrl != null">
+                sku_url = #{skuUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="skuNote != null">
+                sku_note = #{skuNote,jdbcType=VARCHAR},
+            </if>
+            <if test="skuState != null">
+                sku_state = #{skuState,jdbcType=INTEGER},
+            </if>
+            <if test="skuVender != null">
+                sku_vender = #{skuVender,jdbcType=VARCHAR},
+            </if>
+            <if test="skuShop != null">
+                sku_shop = #{skuShop,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where goods_id = #{goodsId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

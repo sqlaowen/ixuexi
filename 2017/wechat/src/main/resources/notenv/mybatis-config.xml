@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias alias="wxGetway" type="com.laowen.bean.WXGetway"/>
+        <typeAlias alias="wxFans" type="com.laowen.bean.WXFans"/>
+        <typeAlias alias="wxReceiveMsg" type="com.laowen.bean.WXReceiveMsg"/>
+        <typeAlias alias="fansRefCard" type="com.laowen.bean.FansRefCard"/>
+        <typeAlias alias="internetCard" type="com.laowen.bean.InternetCard"/>
+
+        <typeAlias alias="refRolePerm" type="com.laowen.bean.RefRolePerm"/>
+        <typeAlias alias="refUserRole" type="com.laowen.bean.RefUserRole"/>
+        <typeAlias alias="sysPermission" type="com.laowen.bean.SysPermission"/>
+        <typeAlias alias="sysRole" type="com.laowen.bean.SysRole"/>
+        <typeAlias alias="sysUser" type="com.laowen.bean.SysUser"/>
+
+    </typeAliases>
+    <mappers>
+        <mapper resource="notenv/mapper/WXGetwayMapper.xml"/>
+        <mapper resource="notenv/mapper/WXFansMapper.xml"/>
+        <mapper resource="notenv/mapper/WXReceiveMsgMapper.xml"/>
+        <mapper resource="notenv/mapper/FansRefCardMapper.xml"/>
+        <mapper resource="notenv/mapper/InternetCardMapper.xml"/>
+
+        <mapper resource="notenv/mapper/RefRolePermMapper.xml"/>
+        <mapper resource="notenv/mapper/RefUserRoleMapper.xml"/>
+        <mapper resource="notenv/mapper/SysPermissionMapper.xml"/>
+        <mapper resource="notenv/mapper/SysRoleMapper.xml"/>
+        <mapper resource="notenv/mapper/SysUserMapper.xml"/>
+
+    </mappers>
+</configuration>

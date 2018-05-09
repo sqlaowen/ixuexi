@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pay.single.dao.PaymentReqLogMapper">
+  
+  <resultMap id="BaseResultMap" type="paymentReqLog">
+    <id column="log_id" jdbcType="VARCHAR" property="logId" />
+    <result column="order_ids" jdbcType="VARCHAR" property="orderIds" />
+    <result column="pay_req" jdbcType="VARCHAR" property="payReq" />
+    <result column="pay_res" jdbcType="VARCHAR" property="payRes" />
+    <result column="log_note" jdbcType="VARCHAR" property="logNote" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    log_id, order_ids, pay_req, pay_res, log_note, create_time, create_user
+  </sql>
+  
+  <insert id="saveOne" parameterType="paymentReqLog">
+    insert into pay_payment_reqlog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        log_id,
+      </if>
+      <if test="orderIds != null">
+        order_ids,
+      </if>
+      <if test="payReq != null">
+        pay_req,
+      </if>
+      <if test="payRes != null">
+        pay_res,
+      </if>
+      <if test="logNote != null">
+        log_note,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        #{logId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderIds != null">
+        #{orderIds,jdbcType=VARCHAR},
+      </if>
+      <if test="payReq != null">
+        #{payReq,jdbcType=VARCHAR},
+      </if>
+      <if test="payRes != null">
+        #{payRes,jdbcType=VARCHAR},
+      </if>
+      <if test="logNote != null">
+        #{logNote,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="impl.laowen.dao.ECHistoryPriceMapper">
+
+    <resultMap id="BaseResultMap" type="ecHistoryPrice">
+        <id column="price_id" jdbcType="VARCHAR" property="priceId"/>
+        <result column="goods_id" jdbcType="VARCHAR" property="goodsId"/>
+        <result column="sku_price" jdbcType="VARCHAR" property="skuPrice"/>
+        <result column="price_state" jdbcType="INTEGER" property="priceState"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      price_id, goods_id, sku_price, price_state, create_time, create_user
+    </sql>
+
+    <!-- 通过goodsIdList批量查询 -->
+    <select id="selectBatchByGoodsIdList" resultType="string">
+        SELECT goods_id FROM ec_history_price
+        where 1=1
+        and goods_id in
+        <foreach collection="goodsIdList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and create_time &gt; DATE_FORMAT(NOW(),'%Y-%m-%d')
+    </select>
+
+    <!-- 通过goodsId查询某个商品的价格 -->
+    <select id="selectByGoodsId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ec_history_price
+        where goods_id = #{goodsId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 批量添加 -->
+    <insert id="insertBatch">
+        insert into ec_history_price (price_id, goods_id, sku_price, price_state, create_time, create_user)
+        VALUES
+        <foreach collection="ecHistoryPriceList" item="item" separator=",">
+            (#{item.priceId}, #{item.goodsId}, #{item.skuPrice}, #{item.priceState}, #{item.createTime}, #{item.createUser})
+        </foreach>
+    </insert>
+
+    <!--增加 -->
+    <insert id="insertOne" parameterType="ecHistoryPrice">
+        insert into ec_history_price
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="priceId != null">
+                price_id,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="skuPrice != null">
+                sku_price,
+            </if>
+            <if test="priceState != null">
+                price_state,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="priceId != null">
+                #{priceId,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=VARCHAR},
+            </if>
+            <if test="skuPrice != null">
+                #{skuPrice,jdbcType=VARCHAR},
+            </if>
+            <if test="priceState != null">
+                #{priceState,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

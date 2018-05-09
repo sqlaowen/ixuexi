@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.single.dao.AliNotifyMapper" >
+
+  <resultMap id="BaseResultMap" type="aliNotify" >
+    <id column="ali_nofigy_id" property="aliNofigyId" jdbcType="INTEGER" />
+    <result column="payment_id" property="paymentId" jdbcType="VARCHAR" />
+    <result column="notify_time" property="notifyTime" jdbcType="TIMESTAMP" />
+    <result column="notify_type" property="notifyType" jdbcType="VARCHAR" />
+    <result column="notify_id" property="notifyId" jdbcType="VARCHAR" />
+    <result column="sign_type" property="signType" jdbcType="VARCHAR" />
+    <result column="sign" property="sign" jdbcType="VARCHAR" />
+    <result column="subject" property="subject" jdbcType="VARCHAR" />
+    <result column="payment_type" property="paymentType" jdbcType="VARCHAR" />
+    <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+    <result column="trade_status" property="tradeStatus" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_payment" property="gmtPayment" jdbcType="TIMESTAMP" />
+    <result column="gmt_close" property="gmtClose" jdbcType="TIMESTAMP" />
+    <result column="refund_status" property="refundStatus" jdbcType="VARCHAR" />
+    <result column="gmt_refund" property="gmtRefund" jdbcType="TIMESTAMP" />
+    <result column="seller_email" property="sellerEmail" jdbcType="VARCHAR" />
+    <result column="buyer_email" property="buyerEmail" jdbcType="VARCHAR" />
+    <result column="seller_id" property="sellerId" jdbcType="VARCHAR" />
+    <result column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="BIGINT" />
+    <result column="total_fee" property="totalFee" jdbcType="BIGINT" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="body" property="body" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="INTEGER" />
+    <result column="is_total_fee_adjust" property="isTotalFeeAdjust" jdbcType="VARCHAR" />
+    <result column="use_coupon" property="useCoupon" jdbcType="VARCHAR" />
+    <result column="error_code" property="errorCode" jdbcType="VARCHAR" />
+    <result column="bank_seq_no" property="bankSeqNo" jdbcType="VARCHAR" />
+    <result column="extra_common_param" property="extraCommonParam" jdbcType="VARCHAR" />
+    <result column="out_channel_type" property="outChannelType" jdbcType="VARCHAR" />
+    <result column="out_channel_amount" property="outChannelAmount" jdbcType="VARCHAR" />
+    <result column="out_channel_inst" property="outChannelInst" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="notify_value" property="notifyValue" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ali_nofigy_id, payment_id, notify_time, notify_type, notify_id, sign_type, sign, 
+    subject, payment_type, trade_no, trade_status, gmt_create, gmt_payment, gmt_close, 
+    refund_status, gmt_refund, seller_email, buyer_email, seller_id, buyer_id, price, 
+    total_fee, quantity, body, discount, is_total_fee_adjust, use_coupon, error_code, 
+    bank_seq_no, extra_common_param, out_channel_type, out_channel_amount, out_channel_inst, 
+    create_time, notify_value
+  </sql>
+  
+  <insert id="saveOne" parameterType="aliNotify" >
+    insert into pay_ali_notify
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="paymentId != null" >
+        payment_id,
+      </if>
+      <if test="notifyTime != null" >
+        notify_time,
+      </if>
+      <if test="notifyType != null" >
+        notify_type,
+      </if>
+      <if test="notifyId != null" >
+        notify_id,
+      </if>
+      <if test="signType != null" >
+        sign_type,
+      </if>
+      <if test="sign != null" >
+        sign,
+      </if>
+      <if test="subject != null" >
+        subject,
+      </if>
+      <if test="paymentType != null" >
+        payment_type,
+      </if>
+      <if test="tradeNo != null" >
+        trade_no,
+      </if>
+      <if test="tradeStatus != null" >
+        trade_status,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtPayment != null" >
+        gmt_payment,
+      </if>
+      <if test="gmtClose != null" >
+        gmt_close,
+      </if>
+      <if test="refundStatus != null" >
+        refund_status,
+      </if>
+      <if test="gmtRefund != null" >
+        gmt_refund,
+      </if>
+      <if test="sellerEmail != null" >
+        seller_email,
+      </if>
+      <if test="buyerEmail != null" >
+        buyer_email,
+      </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="buyerId != null" >
+        buyer_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="totalFee != null" >
+        total_fee,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="body != null" >
+        body,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="isTotalFeeAdjust != null" >
+        is_total_fee_adjust,
+      </if>
+      <if test="useCoupon != null" >
+        use_coupon,
+      </if>
+      <if test="errorCode != null" >
+        error_code,
+      </if>
+      <if test="bankSeqNo != null" >
+        bank_seq_no,
+      </if>
+      <if test="extraCommonParam != null" >
+        extra_common_param,
+      </if>
+      <if test="outChannelType != null" >
+        out_channel_type,
+      </if>
+      <if test="outChannelAmount != null" >
+        out_channel_amount,
+      </if>
+      <if test="outChannelInst != null" >
+        out_channel_inst,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="notifyValue != null" >
+        notify_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="paymentId != null" >
+        #{paymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyTime != null" >
+        #{notifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notifyType != null" >
+        #{notifyType,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyId != null" >
+        #{notifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="signType != null" >
+        #{signType,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null" >
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentType != null" >
+        #{paymentType,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null" >
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStatus != null" >
+        #{tradeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtPayment != null" >
+        #{gmtPayment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtClose != null" >
+        #{gmtClose,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refundStatus != null" >
+        #{refundStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtRefund != null" >
+        #{gmtRefund,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sellerEmail != null" >
+        #{sellerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerEmail != null" >
+        #{buyerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerId != null" >
+        #{buyerId,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=BIGINT},
+      </if>
+      <if test="totalFee != null" >
+        #{totalFee,jdbcType=BIGINT},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="body != null" >
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=INTEGER},
+      </if>
+      <if test="isTotalFeeAdjust != null" >
+        #{isTotalFeeAdjust,jdbcType=VARCHAR},
+      </if>
+      <if test="useCoupon != null" >
+        #{useCoupon,jdbcType=VARCHAR},
+      </if>
+      <if test="errorCode != null" >
+        #{errorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankSeqNo != null" >
+        #{bankSeqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="extraCommonParam != null" >
+        #{extraCommonParam,jdbcType=VARCHAR},
+      </if>
+      <if test="outChannelType != null" >
+        #{outChannelType,jdbcType=VARCHAR},
+      </if>
+      <if test="outChannelAmount != null" >
+        #{outChannelAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="outChannelInst != null" >
+        #{outChannelInst,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notifyValue != null" >
+        #{notifyValue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

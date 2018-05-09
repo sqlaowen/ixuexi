@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WXSelfMenuMapper" >
+  <resultMap id="BaseResultMap" type="wxSelfMenu" >
+    <id column="MENU_ID" property="menuId" jdbcType="VARCHAR" />
+    <result column="WX_ID" property="wxId" jdbcType="VARCHAR" />
+    <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR" />
+    <result column="MENU_TYPE" property="menuType" jdbcType="VARCHAR" />
+    <result column="MENU_KEY" property="menuKey" jdbcType="VARCHAR" />
+    <result column="MENU_URL" property="menuUrl" jdbcType="VARCHAR" />
+    <result column="MENU_SEQ" property="menuSeq" jdbcType="DECIMAL" />
+    <result column="MENU_PID" property="menuPid" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="DECIMAL" />
+    <result column="createUser" property="createUser" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="DECIMAL" />
+    <result column="updateUser" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    menu_id, wx_id, menu_name, menu_type, menu_key, menu_url, menu_seq, menu_pid, createTime, createUser, 
+    updateTime, updateUser
+  </sql>
+  
+  <!-- 根据id查询 -->
+  <select id="findById" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_WX_SELFMENU
+    where MENU_ID = #{menuId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 查询所有 -->
+  <select id="findList" resultMap="BaseResultMap" parameterType="string">
+  	select 
+    <include refid="Base_Column_List" />
+    from T_WX_SELFMENU
+    where wx_id=#{wxId}
+    order by menu_seq asc
+  </select>
+  
+  <!-- (根据menuSeq查询菜单是否存在)查找菜单是否存在 -->
+  <select id="findByMenuSeq" resultMap="BaseResultMap">
+  	select 
+	<include refid="Base_Column_List" />
+	from T_WX_SELFMENU
+  	where wx_id=#{wxId}
+  	and menu_seq=#{menuSeq}
+  </select>
+  
+   <!-- 根据id查询子级 -->
+  <select id="findChildById" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_WX_SELFMENU
+    where MENU_PID = #{menuId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="delAll" parameterType="string">
+    delete from T_WX_SELFMENU
+    where wx_id=#{wxId}
+  </delete>
+  
+  <delete id="delById" parameterType="string">
+  	delete from T_WX_SELFMENU
+    where menu_Id=#{menuId}
+  </delete>
+  
+  <insert id="saveOne" parameterType="wxSelfMenu" >
+    insert into T_WX_SELFMENU
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        MENU_ID,
+      </if>
+      <if test="wxId != null" >
+        WX_ID,
+      </if>
+      <if test="menuName != null" >
+        MENU_NAME,
+      </if>
+      <if test="menuType != null" >
+        MENU_TYPE,
+      </if>
+      <if test="menuKey != null" >
+        MENU_KEY,
+      </if>
+      <if test="menuUrl != null" >
+        MENU_URL,
+      </if>
+      <if test="menuSeq != null" >
+        MENU_SEQ,
+      </if>
+      <if test="menuPid != null" >
+        MENU_PID,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="createUser != null" >
+        createUser,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="updateUser != null" >
+        updateUser,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxId != null" >
+        #{wxId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuType != null" >
+        #{menuType,jdbcType=VARCHAR},
+      </if>
+      <if test="menuKey != null" >
+        #{menuKey,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null" >
+        #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuSeq != null" >
+        #{menuSeq,jdbcType=DECIMAL},
+      </if>
+      <if test="menuPid != null" >
+        #{menuPid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DECIMAL},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    
+  <update id="editById" parameterType="wxSelfMenu" >
+    update T_WX_SELFMENU
+    <set >
+      <if test="wxId != null" >
+        WX_ID = #{wxId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuType != null" >
+        MENU_TYPE = #{menuType,jdbcType=VARCHAR},
+      </if>
+      <if test="menuKey != null" >
+        MENU_KEY = #{menuKey,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null" >
+        MENU_URL = #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuSeq != null" >
+        MENU_SEQ = #{menuSeq,jdbcType=DECIMAL},
+      </if>
+      <if test="menuPid != null" >
+        MENU_PID = #{menuPid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=DECIMAL},
+      </if>
+      <if test="updateUser != null" >
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MENU_ID = #{menuId,jdbcType=VARCHAR}
+  </update>
+</mapper>

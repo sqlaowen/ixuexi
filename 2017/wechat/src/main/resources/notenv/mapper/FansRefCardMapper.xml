@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laowen.dao.FansRefCardMapper">
+
+    <resultMap id="BaseResultMap" type="fansRefCard">
+        <id column="card_id" jdbcType="VARCHAR" property="cardId"/>
+        <result column="wx_id" jdbcType="VARCHAR" property="wxId"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="msisdn" jdbcType="VARCHAR" property="msisdn"/>
+        <result column="iccid" jdbcType="VARCHAR" property="iccid"/>
+        <result column="imsi" jdbcType="VARCHAR" property="imsi"/>
+        <result column="search_no" jdbcType="INTEGER" property="searchNo"/>
+        <result column="phone_no" jdbcType="VARCHAR" property="phoneNo"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="edit_time" jdbcType="TIMESTAMP" property="editTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        card_id, wx_id, open_id, msisdn, iccid, imsi, search_no, phone_no, create_time, edit_time
+    </sql>
+
+    <!-- 通过openId查询 -->
+    <select id="findByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from fans_ref_card
+        where open_id = #{openId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 通过openId和msisdn/iccid/imsi查询 -->
+    <select id="findByOpenIdAndCmoit2003" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from fans_ref_card
+        where open_id = #{openId,jdbcType=VARCHAR}
+        and (msisdn=#{cmoit2003Dto.msisdn,jdbcType=VARCHAR} or iccid=#{cmoit2003Dto.iccid,jdbcType=VARCHAR} or
+        imsi=#{cmoit2003Dto.imsi,jdbcType=VARCHAR})
+    </select>
+
+    <!-- 保存 -->
+    <insert id="insertOne" parameterType="fansRefCard">
+        insert into fans_ref_card
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cardId != null">
+                card_id,
+            </if>
+            <if test="wxId != null">
+                wx_id,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="msisdn != null">
+                msisdn,
+            </if>
+            <if test="iccid != null">
+                iccid,
+            </if>
+            <if test="imsi != null">
+                imsi,
+            </if>
+            <if test="searchNo != null">
+                search_no,
+            </if>
+            <if test="phoneNo != null">
+                phone_no,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="editTime != null">
+                edit_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cardId != null">
+                #{cardId,jdbcType=VARCHAR},
+            </if>
+            <if test="wxId != null">
+                #{wxId,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="msisdn != null">
+                #{msisdn,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imsi != null">
+                #{imsi,jdbcType=VARCHAR},
+            </if>
+            <if test="searchNo != null">
+                #{searchNo},
+            </if>
+            <if test="phoneNo != null">
+                #{phoneNo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="editTime != null">
+                #{editTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateById" parameterType="fansRefCard">
+        update fans_ref_card
+        <set>
+            <if test="wxId != null">
+                wx_id = #{wxId,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                open_id = #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="msisdn != null">
+                msisdn = #{msisdn,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                iccid = #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imsi != null">
+                imsi = #{imsi,jdbcType=VARCHAR},
+            </if>
+            <if test="searchNo != null">
+                search_no = #{searchNo},
+            </if>
+            <if test="phoneNo != null">
+                phone_no = #{phoneNo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="editTime != null">
+                edit_time = #{editTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where card_id = #{cardId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

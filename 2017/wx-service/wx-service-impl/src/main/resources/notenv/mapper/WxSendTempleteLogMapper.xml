@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WxSendTempleteLogMapper">
+
+	<resultMap id="BaseResultMap" type="wxSendTempleteLog">
+		<id column="LOG_ID" jdbcType="VARCHAR" property="logId" />
+		<result column="TEMP_ID" jdbcType="VARCHAR" property="tempId" />
+		<result column="OPENID" jdbcType="VARCHAR" property="openid" />
+		<result column="WX_ID" property="wxId" jdbcType="VARCHAR" />
+		<result column="QIYE_ID" jdbcType="VARCHAR" property="qiyeId" />
+		<result column="PRE_FILL" jdbcType="VARCHAR" property="preFill" />
+		<result column="CONTENT" jdbcType="CHAR" property="content" />
+		<result column="CREATETIME" jdbcType="DECIMAL" property="createTime" />
+		<result column="CREATEUSER" jdbcType="VARCHAR" property="createUser" />
+		<result column="note" jdbcType="VARCHAR" property="note" />
+		<result column="errcode" jdbcType="VARCHAR" property="errcode" />
+		<result column="errmsg" jdbcType="VARCHAR" property="errmsg" />
+		<result column="msgid" jdbcType="VARCHAR" property="msgid" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		LOG_ID, TEMP_ID, OPENID,WX_ID,QIYE_ID, PRE_FILL, CONTENT,
+		CREATETIME,
+		CREATEUSER,note,msgid,errmsg,errcode
+	</sql>
+	
+	<select id="findById" parameterType="String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from T_WX_SENDTEMPLETELOG
+		where LOG_ID = #{logId,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="saveOne" parameterType="wxSendTempleteLog">
+		insert into T_WX_SENDTEMPLETELOG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="logId != null">
+				LOG_ID,
+			</if>
+			<if test="tempId != null">
+				TEMP_ID,
+			</if>
+			<if test="openid != null">
+				OPENID,
+			</if>
+			<if test="wxId != null">
+				WX_ID,
+			</if>
+			<if test="qiyeId != null">
+				QIYE_ID,
+			</if>
+			<if test="preFill != null">
+				PRE_FILL,
+			</if>
+			<if test="content != null">
+				CONTENT,
+			</if>
+			<if test="createTime != null">
+				CREATETIME,
+			</if>
+			<if test="createUser != null">
+				CREATEUSER,
+			</if>
+			<if test="note != null">
+				note,
+			</if>
+			<if test="errcode != null">
+				errcode,
+			</if>
+			<if test="errmsg != null">
+				errmsg,
+			</if>
+			<if test="msgid != null">
+				msgid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="logId != null">
+				#{logId,jdbcType=VARCHAR},
+			</if>
+			<if test="tempId != null">
+				#{tempId,jdbcType=VARCHAR},
+			</if>
+			<if test="openid != null">
+				#{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="wxId != null">
+				#{wxId,jdbcType=VARCHAR},
+			</if>
+			<if test="qiyeId != null">
+				#{qiyeId,jdbcType=VARCHAR},
+			</if>
+			<if test="preFill != null">
+				#{preFill,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=CHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=DECIMAL},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="note != null">
+				#{note,jdbcType=VARCHAR},
+			</if>
+			<if test="errcode != null">
+				#{errcode,jdbcType=VARCHAR},
+			</if>
+			<if test="errmsg != null">
+				#{errmsg,jdbcType=VARCHAR},
+			</if>
+			<if test="msgid != null">
+				#{msgid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+</mapper>

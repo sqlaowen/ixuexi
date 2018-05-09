@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="wxAutoRes" type="com.zgxcw.service.infrastructure.bean.WXAutoRes"/>
+		<typeAlias alias="wxAutoResContent" type="com.zgxcw.service.infrastructure.bean.WXAutoResContent"/>
+		<typeAlias alias="wxGetway" type="com.zgxcw.service.infrastructure.bean.WXGetway"/>
+		<typeAlias alias="wxSelfMenu" type="com.zgxcw.service.infrastructure.bean.WXSelfMenu"/>
+		<typeAlias alias="wxReceiveMsg" type="com.zgxcw.service.infrastructure.bean.WxReceiveMsg"/>
+		<typeAlias alias="wxSendTempleteLog" type="com.zgxcw.service.infrastructure.bean.WxSendTempleteLog"/>
+		<typeAlias alias="wxMsgTemplete" type="com.zgxcw.service.infrastructure.bean.WxMsgTemplete"/>
+		<typeAlias alias="wxSendMsgLog" type="com.zgxcw.service.infrastructure.bean.WxSendMsgLog"/>
+		<typeAlias alias="wxUserRefOpenid" type="com.zgxcw.service.infrastructure.bean.WXUserRefOpenid" />
+		<typeAlias alias="wxBankRefOpenid" type="com.zgxcw.service.infrastructure.bean.WXBankRefOpenid"/>
+		<typeAlias alias="wxBankUNRefOpenidLog" type="com.zgxcw.service.infrastructure.bean.WXBankUNRefOpenidLog"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="notenv/mapper/WXAutoResMapper.xml"/>
+		<mapper resource="notenv/mapper/WXAutoResContentMapper.xml"/>
+		<mapper resource="notenv/mapper/WXGetwayMapper.xml"/>
+		<mapper resource="notenv/mapper/WXSelfMenuMapper.xml"/>
+		<mapper resource="notenv/mapper/WXReceiveMsg.xml"/>
+		<mapper resource="notenv/mapper/WxSendTempleteLogMapper.xml"/>
+		<mapper resource="notenv/mapper/WxMsgTempleteMapper.xml"/>
+		<mapper resource="notenv/mapper/WxSendMsgLogMapper.xml"/>
+		<mapper resource="notenv/mapper/WXUserRefOpenidMapper.xml"/>
+		<mapper resource="notenv/mapper/WXBankRefOpenidMapper.xml"/>
+		<mapper resource="notenv/mapper/WXBankUNRefOpenidLogMapper.xml"/>
+	</mappers>
+</configuration>

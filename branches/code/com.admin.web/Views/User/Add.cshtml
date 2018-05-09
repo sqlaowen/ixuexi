@@ -1,0 +1,113 @@
+﻿@model com.admin.poco.SysUser
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutAdd2015.cshtml";
+}
+
+<!-- 操作 -->
+<div class="row-fluid">
+    <div class="span12 text-right" style="margin-bottom:5px;">
+        <input type="button" class="btn btn-info btn-sm" value="保存" name="btnSave" />
+        <input type="button" class="btn btn-info btn-sm" value="返回" name="btnBack" />
+    </div>
+</div>
+
+<!-- 表单 -->
+<div class="row-fluid">
+    <div class="span12 table-responsive">
+        <form role="form" id="form" class="form-horizontal">
+            <table class="table table-striped table-bordered table-hover">
+                <tr>
+                    <td>
+                        真实名：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Name" name="Name" />
+                    </td>
+                    <td>
+                        性别：
+                    </td>
+                    <td>
+                        <select name="Sex" class="col-xs-10">
+                            <option value="1" @(Model.Sex != 0 ? "selected=selected" : "")>男</option>
+                            <option value="0" @(Model.Sex == 0 ? "selected=selected" : "")>女</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        账号：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Account" @(string.IsNullOrEmpty(Model.Account) ? "" : "disabled=disabled") name="Account" id="Account" />
+                    </td>
+                    <td>
+                        密码：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Pwd" name="Pwd" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        备注：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Note" name="Note" />
+                    </td>
+                    <td>
+                        状态：
+                    </td>
+                    <td>
+                        <select name="State" class="col-xs-10">
+                            <option value="1" @(Model.State != 0 ? "selected=selected" : "")>可用</option>
+                            <option value="0" @(Model.State == 0 ? "selected=selected" : "")>禁用</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" value="@Model.UserId" name="UserId" />
+            <input type="hidden" value="@Model.UpdateUser" name="UpdateUser" />
+            <input type="hidden" value="@Model.UpdateTime" name="UpdateTime" />
+            <input type="hidden" value="@Model.CreateUser" name="CreateUser" />
+            <input type="hidden" value="@Model.CreateTime" name="CreateTime" />
+
+        </form>
+    </div>
+</div>
+
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            $('#Account').on('change', function () {
+                var self = this;
+                $.post('/User/AccountExists/'
+                    , { id: this.value }, function (rev) {
+                        if (rev.exists == 1) {
+                           self.value = '';
+                            top.warn(rev.err);
+                        }
+                    }, 'json');
+            })
+        })
+        //保存
+        $('input[name="btnSave"]').on('click', function () {
+            $.post('/User/Save/', $('#form').getFormsValue(), function (rev) {
+                if (rev.error == 0) {
+                    location.href = decodeURIComponent(getUrlParam('refUrl'));
+                }
+                else {
+                    if (rev.msg) {
+                        top.warn(rev.msg);
+                        return false;
+                    }
+                    top.warn('操作失败！请稍后再试');
+                }
+            }, 'json');
+        });
+        //返回
+        $('input[name="btnBack"]').on('click', function () {
+            location.href = decodeURIComponent(getUrlParam('refUrl'));
+        });
+    </script>
+}

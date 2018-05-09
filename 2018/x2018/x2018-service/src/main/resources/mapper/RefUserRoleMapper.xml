@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.laowen.mapper.RefUserRoleMapper">
+
+    <resultMap id="BaseResultMap" type="refUserRole">
+        <id column="ref_id" jdbcType="VARCHAR" property="refId"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ref_id, user_id, role_id
+  </sql>
+
+    <!-- 根据userId删除  -->
+    <delete id="delByUserId">
+    delete from ref_user_role
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+
+    <!-- <insert id="saveBatch">
+      insert into ref_user_role (user_id, role_id) values
+      <foreach collection="roleIdList" item="roleId" separator=",">
+          (#{userId},#{roleId})
+      </foreach>
+    </insert> -->
+
+    <insert id="saveBatch">
+        insert into ref_user_role (ref_id, user_id, role_id) values
+        <foreach collection="mapList" item="m" separator=",">
+            (
+            #{m.refId,jdbcType=VARCHAR}
+            ,#{m.userId,jdbcType=VARCHAR}
+            ,#{m.roleId,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="findXX" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from ref_user_role
+    </select>
+
+    <!-- <insert id="saveOne" parameterType="refUserRole">
+      insert into ref_user_role
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="refId != null">
+          ref_id,
+        </if>
+        <if test="userId != null">
+          user_id,
+        </if>
+        <if test="roleId != null">
+          role_id,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="refId != null">
+          #{refId,jdbcType=VARCHAR},
+        </if>
+        <if test="userId != null">
+          #{userId,jdbcType=VARCHAR},
+        </if>
+        <if test="roleId != null">
+          #{roleId,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </insert> -->
+
+</mapper>

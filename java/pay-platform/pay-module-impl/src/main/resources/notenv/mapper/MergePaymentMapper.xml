@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pay.single.dao.MergePaymentMapper">
+  
+  <resultMap id="BaseResultMap" type="mergePayment">
+    <id column="merge_payment_id" jdbcType="VARCHAR" property="mergePaymentId" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="gateway_id" jdbcType="VARCHAR" property="gatewayId" />
+    <result column="payment_state_id" jdbcType="INTEGER" property="paymentStateId" />
+    <result column="total_fee" jdbcType="INTEGER" property="totalFee" />
+    <result column="return_url" jdbcType="VARCHAR" property="returnUrl" />
+    <result column="notify_url" jdbcType="VARCHAR" property="notifyUrl" />
+    <result column="bank_code" jdbcType="VARCHAR" property="bankCode" />
+    <result column="time_out" jdbcType="TIMESTAMP" property="timeOut" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="trade_time" jdbcType="TIMESTAMP" property="tradeTime" />
+    <result column="order_close_time" jdbcType="TIMESTAMP" property="orderCloseTime" />
+    <result column="trade_close_time" jdbcType="TIMESTAMP" property="tradeCloseTime" />
+    <result column="third_trade_no" jdbcType="VARCHAR" property="thirdTradeNo" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    merge_payment_id, merchant_id, gateway_id, payment_state_id, total_fee, return_url, 
+    notify_url, bank_code, time_out, create_time, create_user, update_time, update_user, 
+    trade_time, order_close_time, trade_close_time, third_trade_no
+  </sql>
+  
+  <!-- 根据id查找 -->
+  <select id="findById" parameterType="string" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pay_merge_payment
+    where merge_payment_id = #{mergePaymentId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据paymentId查找 -->
+  <select id="findByPaymentId" parameterType="string" resultMap="BaseResultMap">
+  	select m.* from pay_merge_payment m
+	join pay_ref_merge_payment r on m.merge_payment_id=r.merge_payment_id
+	where r.payment_id=#{paymentId}
+  </select>
+  
+  <!-- 查询未支付的合并支付单,用于主动查询 -->
+  <select id="findNoPay" resultMap="BaseResultMap">
+  	SELECT * from pay_merge_payment
+	where payment_state_id=1
+	and merge_payment_id in (
+	'5706b6af164a47d28f349e38ea7926f4'
+	)
+  </select>
+  
+  <insert id="saveOne" parameterType="mergePayment">
+    insert into pay_merge_payment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mergePaymentId != null">
+        merge_payment_id,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="gatewayId != null">
+        gateway_id,
+      </if>
+      <if test="paymentStateId != null">
+        payment_state_id,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="returnUrl != null">
+        return_url,
+      </if>
+      <if test="notifyUrl != null">
+        notify_url,
+      </if>
+      <if test="bankCode != null">
+        bank_code,
+      </if>
+      <if test="timeOut != null">
+        time_out,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="tradeTime != null">
+        trade_time,
+      </if>
+      <if test="orderCloseTime != null">
+        order_close_time,
+      </if>
+      <if test="tradeCloseTime != null">
+        trade_close_time,
+      </if>
+      <if test="thirdTradeNo != null">
+        third_trade_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mergePaymentId != null">
+        #{mergePaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="gatewayId != null">
+        #{gatewayId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStateId != null">
+        #{paymentStateId,jdbcType=INTEGER},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="returnUrl != null">
+        #{returnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyUrl != null">
+        #{notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null">
+        #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="timeOut != null">
+        #{timeOut,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTime != null">
+        #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderCloseTime != null">
+        #{orderCloseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tradeCloseTime != null">
+        #{tradeCloseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thirdTradeNo != null">
+        #{thirdTradeNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="editById" parameterType="mergePayment">
+    update pay_merge_payment
+    <set>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="gatewayId != null">
+        gateway_id = #{gatewayId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStateId != null">
+        payment_state_id = #{paymentStateId,jdbcType=INTEGER},
+      </if>
+      <if test="totalFee != null">
+        total_fee = #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="returnUrl != null">
+        return_url = #{returnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyUrl != null">
+        notify_url = #{notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null">
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="timeOut != null">
+        time_out = #{timeOut,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTime != null">
+        trade_time = #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderCloseTime != null">
+        order_close_time = #{orderCloseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tradeCloseTime != null">
+        trade_close_time = #{tradeCloseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thirdTradeNo != null">
+        third_trade_no = #{thirdTradeNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where merge_payment_id = #{mergePaymentId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

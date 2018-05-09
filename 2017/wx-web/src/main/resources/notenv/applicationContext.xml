@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    
+	<!--配置文件占位符 -->
+	<bean class="com.zgxcw.wx.utils.CustomizedPropertyConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:env/dubbo.properties</value>
+				<value>classpath:env/wx.properties</value>
+				<value>classpath:env/tfs.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="UTF-8" />
+	</bean>
+	
+	<context:annotation-config />
+	
+	<!-- 组件扫描,不扫描Controller -->
+	<context:component-scan base-package="com.zgxcw.wx">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="wx-service-app" />
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="${dubbo.registry.address}" protocol="zookeeper" />
+	<dubbo:consumer timeout="50000" retries="0" check="false" connections="10" lazy="true" version="1.0" />
+	 
+	<!-- 需要暴露的服务接口  -->
+	 <!-- ===============基础服务 begin=============== -->
+	<!-- 自动回复消息 -->
+	<dubbo:reference id="wxAutoResService" interface="com.zgxcw.service.infrastructure.service.WXAutoResService" />
+	<!-- 自动回复消息内容 -->
+	<dubbo:reference id="wxAutoResContentService" interface="com.zgxcw.service.infrastructure.service.WXAutoResContentService" />
+	<!-- 自定义菜单  -->
+	<dubbo:reference id="wxSelfMenuService" interface="com.zgxcw.service.infrastructure.service.WXSelfMenuService" />
+	<!-- 微信网关 -->
+	<dubbo:reference id="wxGetwayService" interface="com.zgxcw.service.infrastructure.service.WXGetwayService" />
+	
+	<!-- ===============基础服务 end=============== -->
+	
+	<!-- ===============组合服务 begin=============== -->
+	<!-- 被动消息回复 -->
+	<dubbo:reference id="sendPassiveMsgService" interface="com.zgxcw.service.combine.service.SendPassiveMsgService" />
+	<!-- 自定义菜单设置 -->
+	<dubbo:reference id="setMenuService" interface="com.zgxcw.service.combine.service.SetMenuService" />
+	
+	<!-- ===============组合服务 end=============== -->
+	
+</beans>
+

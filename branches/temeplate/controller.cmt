@@ -1,0 +1,128 @@
+﻿<#@ template language="c#" HostSpecific="True" #>
+<#@ output extension= ".cs" #>
+<#
+	TableHost host = (TableHost)(Host);		
+	
+	ColumnInfo identityKey=host.IdentityKey;
+	string returnValue = "void";
+    if (identityKey!=null)
+    {         
+         returnValue = CodeCommon.DbTypeToCS(identityKey.TypeName);              
+    }
+#>
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using com.admin.business;
+using com.admin.poco;
+
+namespace com.admin.web.Controllers
+{
+	//<#= host.TableName #>
+	public class <#= host.TableName #>Controller : Controller
+	{
+		//
+        // GET: /Menu/
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult GetList()
+        {
+            B_<#= host.TableName #> bll = new B_<#= host.TableName #>();
+            var page = bll.Page(Request.Form);
+            
+            return Json(new { list = page.DataList, count = page.RowNum });
+        }
+
+        /// <summary>
+        /// 添加/修改页面
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Add(int id = 0)
+        {
+            <#= host.TableName #> entity = null;
+            if (id == 0)
+			{
+                entity = new <#= host.TableName #>();
+			}
+            else
+			{
+				B_<#= host.TableName #> bll = new B_<#= host.TableName #>();
+                entity = bll.GetSingle(id);
+			}
+            return View(entity);
+        }
+
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Save(<#= host.TableName #> entity)
+        {
+            B_<#= host.TableName #> bll = new B_<#= host.TableName #>();
+            try
+            {
+                if (entity.<#= host.IdentityKey.ColumnName #> == 0)
+                {
+                    bll.Insert(entity);
+                }
+                else
+                {
+                    bll.Update(entity);
+                }
+                return Json(new { error = "0" });
+            }
+            catch
+            {
+                return View(entity);
+            }
+        }
+
+        /// <summary>
+        /// 单个删除
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Del(<#= host.TableName #> entity)
+        {
+            entity.State = 0;
+            B_<#= host.TableName #> bll = new B_<#= host.TableName #>();
+            if(bll.Update(entity)>0)
+                return Json(new { error = "0" });
+            else
+                return Json(new { error = "1" });
+        }
+		
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DelBatch()
+        {
+            string ids = Request.Form["ids"];
+            B_<#= host.TableName #> bll = new B_<#= host.TableName #>();
+            if (bll.DelBatch(ids) > 0)
+                return Json(new { error = "0" });
+            else
+                return Json(new { error = "1" });
+        }
+
+	}
+}
+	

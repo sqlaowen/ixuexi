@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laowen.mapper.WXFansMapper">
+
+    <resultMap id="BaseResultMap" type="wxFans">
+        <id column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="wx_id" jdbcType="VARCHAR" property="wxId"/>
+        <result column="wx_ghid" jdbcType="VARCHAR" property="wxGhid"/>
+        <result column="fans_state" jdbcType="INTEGER" property="fansState"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="edit_time" jdbcType="TIMESTAMP" property="editTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        open_id, wx_id, wx_ghid, fans_state, create_time, edit_time
+    </sql>
+
+    <!-- 通过openId查询 -->
+    <select id="findByOpenId" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wx_fans
+        where open_id = #{openId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

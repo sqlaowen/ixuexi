@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="service-wx-app" />
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="${dubbo.registry.address}" protocol="zookeeper" />
+
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" />
+
+	<dubbo:monitor protocol="registry" />
+
+	<!-- 声明需要暴露的服务接口 -->
+	<!-- ===============基础服务 begin=============== -->
+	<!-- 自动回复消息 -->
+	<dubbo:service interface="com.zgxcw.service.infrastructure.service.WXAutoResService" ref="wxAutoResService" version="1.0" owner="wenshiwei" layer="infrastructure" />
+	<!-- 自动回复消息内容 -->
+	<dubbo:service interface="com.zgxcw.service.infrastructure.service.WXAutoResContentService" ref="wxAutoResContentService" version="1.0" owner="wenshiwei" layer="infrastructure" />
+	<!-- 自定义菜单  -->
+	<dubbo:service interface="com.zgxcw.service.infrastructure.service.WXSelfMenuService" ref="wxSelfMenuService" version="1.0" owner="wenshiwei" layer="infrastructure" />
+	<!-- 微信网关 -->
+	<dubbo:service interface="com.zgxcw.service.infrastructure.service.WXGetwayService" ref="wxGetwayService" version="1.0" owner="wenshiwei" layer="infrastructure" />
+	<!-- 账号REF微信关联 -->
+	<dubbo:service interface="com.zgxcw.service.infrastructure.service.WXUserRefOpenidService" ref="wxUserRefOpenidService" version="1.0" owner="wenshiwei" layer="infrastructure" />
+	<!-- 银行卡号REF微信关联 -->
+	<dubbo:service interface="com.zgxcw.service.infrastructure.service.WXBankRefOpenidService" ref="wxBankRefOpenidService" version="1.0" owner="wenshiwei" layer="infrastructure" />
+	
+	<!-- ===============基础服务 end=============== -->
+	
+	<!-- ===============组合服务 begin=============== -->
+	<!-- 被动消息回复 -->
+	<dubbo:service interface="com.zgxcw.service.combine.service.SendPassiveMsgService" ref="sendPassiveMsgService" version="1.0" owner="wenshiwei" layer="combine" />
+	<!-- 自定义菜单设置 -->
+	<dubbo:service interface="com.zgxcw.service.combine.service.SetMenuService" ref="setMenuService" version="1.0" owner="wenshiwei" layer="combine" />
+	<!-- wx common service -->
+	<dubbo:service interface="com.zgxcw.service.combine.service.WXCommonService" ref="wxCommonService" version="1.0" owner="wenshiwei" layer="combine"/>
+	<!-- ===============组合服务 end=============== -->
+</beans>

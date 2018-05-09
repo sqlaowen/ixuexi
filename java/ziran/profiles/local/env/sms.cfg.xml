@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 短信平台采用的是 http post请求，返回xml -->
+<smses>
+	<!--
+		channel :com.zgxcw.service.infrastructure.sms.constants.SMSUseConst.SMS_VERIFY_CODE
+		url 	:请求地址
+		userid	:企业ID(不验证)
+		account	:账号
+		password:密码
+		extno	:扩展子号
+	-->
+	<!-- 5平台（共享通道） -->
+	 <sms>
+		<channel>SMS_VERIFY_CODE</channel>
+		<url>http://dx.ipyy.net/sms.aspx</url>
+		<userid></userid>
+		<account>xd001106</account>
+		<password>xd00110644</password>
+		<extno></extno>
+	</sms> 
+	<!-- ADC平台（独享通道） -->
+	<sms>
+		<channel>SMS_VERIFY_CODE</channel>
+		<url>http://114.113.154.13/sms.aspx</url>
+		<userid></userid>
+		<account>ADC0066</account>
+		<password>ADC006649</password>
+		<extno>0066</extno>
+	</sms>
+	<!-- ADC平台上行（独享通道） -->
+	 <!-- <sms>
+		<channel>SMS_VERIFY_UP</channel>
+		<url>http://114.113.154.13/sms.aspx</url>
+		<userid></userid>
+		<account>ADC0066</account>
+		<password>ADC006649</password>
+		<extno>0066</extno>
+	</sms>  -->
+</smses>

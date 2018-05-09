@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WXUserRefOpenidMapper">
+
+	<resultMap id="BaseResultMap" type="wxUserRefOpenid">
+		<id column="REF_ID" jdbcType="VARCHAR" property="refId" />
+		<result column="WX_ID" jdbcType="VARCHAR" property="wxId" />
+		<result column="QIYE_ID" jdbcType="VARCHAR" property="qiyeId" />
+		<result column="YHU_ID" jdbcType="VARCHAR" property="yhuId" />
+		<result column="OPENID" jdbcType="VARCHAR" property="openid" />
+		<result column="CREATETIME" jdbcType="DECIMAL" property="createTime" />
+		<result column="CREATEUSER" jdbcType="VARCHAR" property="createUser" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		REF_ID, WX_ID, QIYE_ID, YHU_ID, OPENID, CREATETIME, CREATEUSER
+	</sql>
+
+	<select id="findById" parameterType="string" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from T_WX_USERREFOPENID
+		where REF_ID = #{refId,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 根据wxId, 企业id里查询 -->
+	<select id="findByAccountId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from T_WX_USERREFOPENID
+		<where>
+			<if test="wxId != null">
+				and WX_ID=#{wxId}
+			</if>
+			<if test="qiyeId != null">
+				and QIYE_ID=#{qiyeId}
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据wxId, 企业id, openid 查询 -->
+	<select id="findByQiyeidOpenid" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from T_WX_USERREFOPENID
+		<where>
+			<if test="wxId != null">
+				and WX_ID=#{wxId}
+			</if>
+			<if test="openid != null">
+				and OPENID=#{openid}
+			</if>
+			<if test="qiyeId != null">
+				and QIYE_ID=#{qiyeId}
+			</if>
+			<if test="yhuId != null">
+				and YHU_ID=#{yhuId}
+			</if>
+		</where>
+	</select>
+
+	<insert id="saveOne" parameterType="wxUserRefOpenid">
+		insert into T_WX_USERREFOPENID
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="refId != null">
+				REF_ID,
+			</if>
+			<if test="wxId != null">
+				WX_ID,
+			</if>
+			<if test="qiyeId != null">
+				QIYE_ID,
+			</if>
+			<if test="yhuId != null">
+				YHU_ID,
+			</if>
+			<if test="openid != null">
+				OPENID,
+			</if>
+			<if test="createTime != null">
+				CREATETIME,
+			</if>
+			<if test="createUser != null">
+				CREATEUSER,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="refId != null">
+				#{refId,jdbcType=VARCHAR},
+			</if>
+			<if test="wxId != null">
+				#{wxId,jdbcType=VARCHAR},
+			</if>
+			<if test="qiyeId != null">
+				#{qiyeId,jdbcType=VARCHAR},
+			</if>
+			<if test="yhuId != null">
+				#{yhuId,jdbcType=VARCHAR},
+			</if>
+			<if test="openid != null">
+				#{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=DECIMAL},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

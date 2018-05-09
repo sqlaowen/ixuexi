@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.laowen.dao.SysPermissionMapper">
+
+    <resultMap id="BaseResultMap" type="sysPermission">
+        <id column="perm_id" jdbcType="VARCHAR" property="permId"/>
+        <result column="perm_name" jdbcType="VARCHAR" property="permName"/>
+        <result column="perm_pid" jdbcType="VARCHAR" property="permPid"/>
+        <result column="perm_type" jdbcType="INTEGER" property="permType"/>
+        <result column="perm_seq" jdbcType="INTEGER" property="permSeq"/>
+        <result column="perm_url" jdbcType="VARCHAR" property="permUrl"/>
+        <result column="perm_code" jdbcType="VARCHAR" property="permCode"/>
+        <result column="perm_icon" jdbcType="VARCHAR" property="permIcon"/>
+        <result column="perm_status" jdbcType="INTEGER" property="permStatus"/>
+        <result column="perm_note" jdbcType="VARCHAR" property="permNote"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+    </resultMap>
+
+    <!-- result 资源 -->
+    <resultMap id="ChildResourceResultMap" type="sysPermission" extends="BaseResultMap">
+        <collection property="childs" select="findResourceByMenuId" column="perm_id"/>
+    </resultMap>
+
+    <!-- result 菜单 -->
+    <resultMap id="ChildMenuResultMap" type="sysPermission" extends="BaseResultMap">
+        <collection property="childs" select="findMenuByMenuId" column="perm_id"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        perm_id, perm_name, perm_pid, perm_type, perm_seq, perm_url, perm_code, perm_icon,
+        perm_status, perm_note, create_time, create_user, update_time, update_user
+    </sql>
+
+    <!-- //根据id取资源 -->
+    <select id="findById" resultMap="ChildResourceResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where perm_id = #{permId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- //取资源 -->
+    <select id="findList" resultMap="ChildResourceResultMap" parameterType="sysPermission">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        <where>
+            <if test="permType != null">
+                and perm_type =#{permType}
+            </if>
+            <if test="permStatus != null">
+                and perm_status=#{permStatus}
+            </if>
+            <if test="permPid ==null">
+                and perm_pid='0'
+            </if>
+        </where>
+        order by perm_seq asc
+    </select>
+
+    <!-- 取菜单 -->
+    <select id="findMenu" resultMap="ChildMenuResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where perm_type=0
+        and perm_status=0
+        and perm_pid='0'
+        order by perm_seq asc
+    </select>
+
+    <!-- 取左侧菜单树 -->
+    <select id="findLeftTreeMenu" resultMap="BaseResultMap">
+        SELECT distinct p.* from sys_permission p
+        join ref_role_perm pr on p.perm_id=pr.perm_id
+        join ref_user_role ur on pr.role_id=ur.role_id
+        <where>
+            <if test="userId!=null">
+                and ur.user_id=#{userId}
+            </if>
+            and p.perm_status=0
+            and p.perm_type=0
+        </where>
+        order by p.perm_seq asc
+        <!-- select
+      <include refid="Base_Column_List" />
+      from sys_permission
+      where perm_type=0
+      and perm_status=0
+      order by perm_seq asc -->
+    </select>
+
+
+    <!-- //根据menuId取权限 -->
+    <select id="findPermByMenuId" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where perm_pid=#{id}
+        and perm_status=0
+        and perm_type=1
+        order by perm_seq asc
+    </select>
+
+    <!-- 根据menuId取菜单 -->
+    <select id="findMenuByMenuId" resultMap="ChildMenuResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where perm_pid=#{id}
+        and perm_status=0
+        and perm_type=0
+        order by perm_seq asc
+    </select>
+
+    <!-- 根据menuId取资源 -->
+    <select id="findResourceByMenuId" resultMap="ChildResourceResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where perm_pid=#{id}
+        and perm_status=0
+        order by perm_seq asc
+    </select>
+
+    <!-- 根据角色id取资源 -->
+    <select id="findResourceByRoleId" resultMap="BaseResultMap" parameterType="string">
+        select p.* from sys_permission p
+        join ref_role_perm r on p.perm_id=r.perm_id
+        where r.role_id=#{roleId}
+        and p.perm_status=0
+    </select>
+
+    <!-- 根据userId查询权限list -->
+    <select id="findListPermByUserId" resultMap="BaseResultMap">
+        SELECT p.* from sys_permission p
+        join ref_role_perm pr on p.perm_id=pr.perm_id
+        join sys_role r on pr.role_id=r.role_id
+        join ref_user_role ur on r.role_id=ur.role_id
+        <where>
+            <if test="userId!=null">
+                and ur.user_id=#{userId}
+            </if>
+            and p.perm_status=0
+            and p.perm_type=1
+        </where>
+    </select>
+
+    <insert id="save" parameterType="sysPermission">
+        insert into sys_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="permId != null">
+                perm_id,
+            </if>
+            <if test="permName != null">
+                perm_name,
+            </if>
+            <if test="permPid != null">
+                perm_pid,
+            </if>
+            <if test="permType != null">
+                perm_type,
+            </if>
+            <if test="permSeq != null">
+                perm_seq,
+            </if>
+            <if test="permUrl != null">
+                perm_url,
+            </if>
+            <if test="permCode != null">
+                perm_code,
+            </if>
+            <if test="permIcon != null">
+                perm_icon,
+            </if>
+            <if test="permStatus != null">
+                perm_status,
+            </if>
+            <if test="permNote != null">
+                perm_note,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="permId != null">
+                #{permId,jdbcType=VARCHAR},
+            </if>
+            <if test="permName != null">
+                #{permName,jdbcType=VARCHAR},
+            </if>
+            <if test="permPid != null">
+                #{permPid,jdbcType=VARCHAR},
+            </if>
+            <if test="permType != null">
+                #{permType,jdbcType=INTEGER},
+            </if>
+            <if test="permSeq != null">
+                #{permSeq,jdbcType=INTEGER},
+            </if>
+            <if test="permUrl != null">
+                #{permUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="permCode != null">
+                #{permCode,jdbcType=VARCHAR},
+            </if>
+            <if test="permIcon != null">
+                #{permIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="permStatus != null">
+                #{permStatus,jdbcType=INTEGER},
+            </if>
+            <if test="permNote != null">
+                #{permNote,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="editById" parameterType="sysPermission">
+        update sys_permission
+        <set>
+            <if test="permName != null">
+                perm_name = #{permName,jdbcType=VARCHAR},
+            </if>
+            <if test="permPid != null">
+                perm_pid = #{permPid,jdbcType=VARCHAR},
+            </if>
+            <if test="permType != null">
+                perm_type = #{permType,jdbcType=INTEGER},
+            </if>
+            <if test="permSeq != null">
+                perm_seq = #{permSeq,jdbcType=INTEGER},
+            </if>
+            <if test="permUrl != null">
+                perm_url = #{permUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="permCode != null">
+                perm_code = #{permCode,jdbcType=VARCHAR},
+            </if>
+            <if test="permIcon != null">
+                perm_icon = #{permIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="permStatus != null">
+                perm_status = #{permStatus,jdbcType=INTEGER},
+            </if>
+            <if test="permNote != null">
+                perm_note = #{permNote,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where perm_id = #{permId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

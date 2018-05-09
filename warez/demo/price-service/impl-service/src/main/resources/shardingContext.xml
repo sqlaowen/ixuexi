@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:rdb="http://www.dangdang.com/schema/ddframe/rdb"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd 
+                        http://www.springframework.org/schema/tx 
+                        http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/context 
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.dangdang.com/schema/ddframe/rdb 
+                        http://www.dangdang.com/schema/ddframe/rdb/rdb.xsd">
+
+
+    <bean id="ds_base" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${ds_base.driverClassName}"/>
+        <property name="url" value="${ds_base.url}"/>
+        <property name="username" value="${ds_base.username}"/>
+        <property name="password" value="${ds_base.password}"/>
+    </bean>
+
+    <bean id="ds_0" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${ds_0.driverClassName}"/>
+        <property name="url" value="${ds_0.url}"/>
+        <property name="username" value="${ds_0.username}"/>
+        <property name="password" value="${ds_0.password}"/>
+    </bean>
+
+    <bean id="ds_1" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${ds_1.driverClassName}"/>
+        <property name="url" value="${ds_1.url}"/>
+        <property name="username" value="${ds_1.username}"/>
+        <property name="password" value="${ds_1.password}"/>
+    </bean>
+
+    <rdb:strategy id="databaseShardingStrategy" sharding-columns="goods_id"
+                  algorithm-class="com.warez.algorithm.DatabaseShardingStrategy"/>
+    <rdb:strategy id="tableShardingStrategy" sharding-columns="goods_id"
+                  algorithm-class="com.warez.algorithm.TableShardingStrategy"/>
+    <rdb:strategy id="ecGoodsStrategy" sharding-columns="goods_id"
+                  algorithm-class="com.warez.algorithm.TableShardingStrategy"/>
+
+    <rdb:data-source id="shardingDataSource">
+        <rdb:sharding-rule data-sources="ds_0, ds_1,ds_base">
+            <rdb:table-rules>
+                <rdb:table-rule logic-table="ec_platform" actual-tables="ds_base.ec_platform"/>
+                <rdb:table-rule logic-table="ec_goods" actual-tables="ds_${0..1}.ec_goods_${0..3}"
+                                database-strategy="databaseShardingStrategy" table-strategy="ecGoodsStrategy"/>
+                <rdb:table-rule logic-table="ec_history_price" actual-tables="ds_${0..1}.ec_history_price_${0..3}"
+                                database-strategy="databaseShardingStrategy" table-strategy="tableShardingStrategy"/>
+            </rdb:table-rules>
+        </rdb:sharding-rule>
+    </rdb:data-source>
+
+    <!-- 事务管理器  -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="shardingDataSource"/>
+    </bean>
+
+    <!-- 定义拦截器，用来指定事务属性、级别和异常处理 -->
+    <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+        <property name="transactionManager" ref="transactionManager" />
+        <property name="transactionAttributes">
+            <props>
+                <prop key="select*">PROPAGATION_REQUIRED,-Exception</prop>
+                <prop key="insert*">PROPAGATION_REQUIRED,-Exception</prop>
+
+            </props>
+        </property>
+    </bean>
+    <!-- 用来定义哪些类需要事务管理 spring事务动态代理类 BeanNameAutoProxyCreator 根据类名自动代理，接受表达式 -->
+    <bean id="beanProxy" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <value>*Service</value>
+        </property>
+        <property name="interceptorNames">
+            <value>transactionInterceptor</value>
+        </property>
+    </bean>
+
+    <!-- sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="shardingDataSource" />
+        <property name="configLocation" value="classpath:notenv/mybatis-config.xml" />
+        <property name="plugins">
+            <bean class="com.github.pagehelper.PageHelper">
+                <property name="properties">
+                    <value>
+                        dialect=mysql
+                        reasonable=true
+                        pageSizeZero=true
+                    </value>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+</beans>

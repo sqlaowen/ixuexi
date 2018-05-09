@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- metaq producer -->
+	<bean id="sessionFactory" class="com.taobao.metamorphosis.client.extension.spring.XAMetaqMessageSessionFactoryBean">
+		<property name="zkConnect" value="${metaq.registry.address}" />
+		<property name="zkSessionTimeoutMs" value="30000" />
+		<property name="zkConnectionTimeoutMs" value="30000" />
+		<property name="zkSyncTimeMs" value="5000" />
+	</bean>
+	
+	<bean id="messageBodyConverter" class="com.pay.utils.MetaqMessageConverter" />
+	
+	<bean id="metaqTemplate" class="com.taobao.metamorphosis.client.extension.spring.MetaqTemplate">
+		<property name="messageSessionFactory" ref="sessionFactory" />
+		<property name="messageBodyConverter" ref="messageBodyConverter" />
+	</bean>
+
+	<!-- metaq customer -->
+	<bean id="topic1" class="com.taobao.metamorphosis.client.extension.spring.MetaqTopic">
+		<!-- 同一个group(包括集群)下只有一个消费者 -->
+		<property name="group" value="group1" />
+		<property name="topic" value="test" />
+		<property name="maxBufferSize" value="16384" />
+	</bean>
+	<bean id="topic1Listener" class="com.pay.metaq.MetaqTestListener">
+		<property name="processThreads" value="10" />
+	</bean>
+
+	<!-- metaq container -->
+	<bean id="listenerContainer" class="com.taobao.metamorphosis.client.extension.spring.MessageListenerContainer">
+		<property name="messageSessionFactory" ref="sessionFactory" />
+		<property name="messageBodyConverter" ref="messageBodyConverter" />
+		<property name="subscribers">
+			<map>
+				<entry key-ref="topic1" value-ref="topic1Listener" />
+			</map>
+		</property>
+	</bean>
+</beans>

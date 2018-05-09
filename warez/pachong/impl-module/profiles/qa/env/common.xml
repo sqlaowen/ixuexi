@@ -1,0 +1,47 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 将要抓取的list页 -->
+	<bean id="urlList" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<!-- 手机 -->
+				<value>https://list.jd.com/list.html?cat=9987,653,655&amp;page=%s</value>
+				<!-- 学生平板 -->
+				<value>https://list.jd.com/list.html?cat=652,12346,12358&amp;page=%s</value>
+				<!-- 点读笔 -->
+				<value>https://list.jd.com/list.html?cat=652,12346,12357&amp;page=%s</value>
+				<!-- 电纸书 -->
+				<value>https://list.jd.com/list.html?cat=652,12346,1203&amp;page=%s</value>
+				<!-- 电视 -->
+				<value>https://list.jd.com/list.html?cat=737,794,798&amp;page=%s</value>
+				<!-- 空调 -->
+				<value>https://list.jd.com/list.html?cat=737,794,870&amp;page=%s</value>
+				<!-- 洗衣机 -->
+				<value>https://list.jd.com/list.html?cat=737,794,880&amp;page=%s</value>
+				<!-- 冰箱 -->
+				<value>https://list.jd.com/list.html?cat=737,794,878&amp;page=%s</value>
+				<!-- 油烟机 -->
+				<value>https://list.jd.com/list.html?cat=737,13297,1300&amp;page=%s</value>
+				<!-- 热水器 -->
+				<value>https://list.jd.com/list.html?cat=737,13297,1706&amp;page=%s</value>
+				<!-- 笔记本 -->
+				<value>https://list.jd.com/list.html?cat=670,671,672&amp;page=%s</value>
+				<!-- 游戏本 -->
+				<value>https://list.jd.com/list.html?cat=670,671,1105&amp;page=%s</value>
+				<!-- 平板电脑 -->
+				<value>https://list.jd.com/list.html?cat=670,671,2694&amp;page=%s</value>
+				<!-- 台式机 -->
+				<value>https://list.jd.com/list.html?cat=670,671,673&amp;page=%s</value>
+				<!-- 一体机 -->
+				<value>https://list.jd.com/list.html?cat=670,671,12798&amp;page=%s</value>
+				<!-- 显示器 -->
+				<value>https://list.jd.com/list.html?cat=670,677,688&amp;page=%s</value>
+				<!-- 游戏机 -->
+				<value>https://list.jd.com/list.html?cat=670,12800,12801&amp;page=%s</value>
+			</list>
+		</constructor-arg>
+	</bean>
+</beans>

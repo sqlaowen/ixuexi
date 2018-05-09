@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<package name="com.pay.single.bean" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="notenv/mapper/AliNotifyMapper.xml" />
+		<mapper resource="notenv/mapper/AliReturnMapper.xml" />
+		<mapper resource="notenv/mapper/MergePaymentLogMapper.xml" />
+		<mapper resource="notenv/mapper/MergePaymentMapper.xml" />
+		<mapper resource="notenv/mapper/PaymentGatewayMapper.xml" />
+		<mapper resource="notenv/mapper/PaymentLogMapper.xml" />
+		<mapper resource="notenv/mapper/PaymentMapper.xml" />
+		<mapper resource="notenv/mapper/PaymentOrderMapper.xml" />
+		<mapper resource="notenv/mapper/PaymentRefMergeMapper.xml" />
+		<mapper resource="notenv/mapper/PaymentRepeatMapper.xml" />
+		<mapper resource="notenv/mapper/PaymentReqLogMapper.xml" />
+		<mapper resource="notenv/mapper/PaymentStateMapper.xml" />
+		<mapper resource="notenv/mapper/WXCouponMapper.xml" />
+		<mapper resource="notenv/mapper/WXNotifyMapper.xml" />
+	</mappers>
+</configuration>

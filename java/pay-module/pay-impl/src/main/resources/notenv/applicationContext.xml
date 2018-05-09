@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--配置文件占位符 -->
+	<import resource="classpath:env/property_configurer.xml" />
+
+	<!--数据连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="3" />
+		<property name="minIdle" value="3" />
+		<property name="maxActive" value="20" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<!-- 配置监控统计拦截的filters -->
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!--事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 定义拦截器，用来指定事务属性、级别和异常处理 -->
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="save*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="edit*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="del*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="*">PROPAGATION_REQUIRED,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 用来定义哪些类需要事务管理 spring事务动态代理类 BeanNameAutoProxyCreator 根据类名自动代理，接受表达式 -->
+	<bean id="beanProxy" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<value>*Service</value>
+		</property>
+		<property name="interceptorNames">
+			<value>transactionInterceptor</value>
+		</property>
+	</bean>
+
+	<!-- sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:notenv/mybatis-config.xml" />
+		<property name="plugins">
+			<bean class="com.github.pagehelper.PageHelper">
+				<property name="properties">
+					<value>
+						dialect=mysql
+						reasonable=true
+						pageSizeZero=true
+					</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- ================================================================== -->
+	<!-- ================================================================== -->
+	
+	<!-- //////////////////////支付相关  begin////////////////////// -->
+	<!-- 支付 -支付单-->
+	<bean id="paymentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.pay.single.dao.PaymentMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="paymentService" class="com.pay.single.impl.PaymentServiceImpl">
+		<property name="paymentMapper" ref="paymentMapper" />
+	</bean>
+	<!-- 支付 -支付单日志-->
+	<bean id="paymentLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.pay.single.dao.PaymentLogMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="paymentLogService" class="com.pay.single.impl.PaymentLogServiceImpl">
+		<property name="paymentLogMapper" ref="paymentLogMapper" />
+	</bean>
+	<!-- 支付 -支付单ref订单-->
+	<bean id="paymentOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.pay.single.dao.PaymentOrderMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="paymentOrderService" class="com.pay.single.impl.PaymentOrderServiceImpl">
+		<property name="paymentOrderMapper" ref="paymentOrderMapper" />
+	</bean>
+	<!-- 支付 -关闭订单(支付单)-->
+	<bean id="paymentCloseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.pay.single.dao.PaymentCloseMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="paymentCloseService" class="com.pay.single.impl.PaymentCloseServiceImpl">
+		<property name="paymentCloseMapper" ref="paymentCloseMapper" />
+	</bean>
+	<!-- 支付 -ali同步通知-->
+	<bean id="aliReturnMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.pay.single.dao.AliReturnMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="aliReturnService" class="com.pay.single.impl.AliReturnServiceImpl">
+		<property name="aliReturnMapper" ref="aliReturnMapper" />
+	</bean>
+	<!-- 支付 -ali异步通知-->
+	<bean id="aliNotifyMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.pay.single.dao.AliNotifyMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="aliNotifyService" class="com.pay.single.impl.AliNotifyServiceImpl">
+		<property name="aliNotifyMapper" ref="aliNotifyMapper" />
+	</bean>
+	
+	<!-- /////////////组合服务///////////// -->
+	<!-- 支付 -->
+	<bean id="payService" class="com.pay.combine.impl.PayServiceImpl">
+		<property name="paymentLogService" ref="paymentLogService" />
+		<property name="paymentService" ref="paymentService" />
+		<property name="paymentOrderService" ref="paymentOrderService" />
+		<property name="paymentCloseService" ref="paymentCloseService" />
+	</bean>
+	<!-- 支付通知 -->
+	<bean id="payNotifyService" class="com.pay.combine.impl.PayNotifyServiceImpl">
+		<property name="aliReturnService" ref="aliReturnService" />
+		<property name="aliNotifyService" ref="aliNotifyService" />
+		<property name="paymentService" ref="paymentService" />
+		<property name="paymentLogService" ref="paymentLogService" />
+	</bean>
+	<!-- //////////////////////支付相关  end////////////////////// -->
+</beans>

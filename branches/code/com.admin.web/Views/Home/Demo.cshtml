@@ -1,0 +1,201 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Demo</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/Bootstrap/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/Bootstrap/bootstrap-responsive.min.css")" />
+    <style type="text/css">
+        body {
+            font-size: 12px;
+        }
+
+        .table th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+            margin-bottom: 0px;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            margin: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- 面包屑 -->
+        <div class="row-fluid">
+            <div class="span12 text-right">
+                <ul class="breadcrumb">
+                    <li>
+                        @*@Html.MvcSiteMap().SiteMapPath()*@
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 操作 -->
+        <div class="row-fluid">
+            <div class="span12 text-right">
+                <input type="button" class="btn btn-info" value="添加" />
+                <input type="button" class="btn btn-info" value="修改" />
+                <input type="button" class="btn btn-info" value="删除" />
+                <input type="button" class="btn btn-info" value="查询" />
+            </div>
+        </div>
+        <!-- 表单 -->
+        <div class="row-fluid">
+            <div class="span12 table-responsive" id="form">
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <td style="width:60px;">
+                            邮箱：
+                        </td>
+                        <td>
+                            <input type="text" />
+                        </td>
+                        <td style="width:60px;">
+                            密码：
+                        </td>
+                        <td>
+                            <input type="text" />
+                        </td>
+                        <td style="width:60px;">
+                            地址：
+                        </td>
+                        <td>
+                            <input type="text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            邮箱：
+                        </td>
+                        <td>
+                            <input type="text" />
+                        </td>
+                        <td>
+                            密码：
+                        </td>
+                        <td>
+                            <input type="text" />
+                        </td>
+                        <td>
+                            地址：
+                        </td>
+                        <td>
+                            <input type="text" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- 查询结果列表 -->
+        <div class="row-fluid">
+            <div class="span12 table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead style="background-color:#DBEAF9;">
+                        <tr>
+                            <th style="width:80px;">
+                                <label><input type="checkbox" name="ckfather" />No.</label>
+                                <input type="hidden" name="_hidid_" />
+                            </th>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                No.
+                            </th>
+                            <th style="width:115px;">
+                                操作
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="ckson" />
+                                    1234567
+                                </label>
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                <a class="btn btn-info" href="http://www.baidu.com">修改</a>
+                                <a class="btn btn-info" href="javascript:;">删除</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="ckson" />
+                                    1234
+                                </label>
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                <a class="btn btn-info" href="http://www.baidu.com">修改</a>
+                                <a class="btn btn-info" href="javascript:;">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <div class="row-fluid">
+            <div class="span12">
+                <ul class="pagination mypager" id="personPagination"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

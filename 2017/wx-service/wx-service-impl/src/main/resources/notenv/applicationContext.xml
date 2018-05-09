@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--配置文件占位符 -->
+	<import resource="classpath:env/property_configurer.xml" />
+
+	<!--写数据连接池 -->
+	<bean id="writeDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.write.driverClassName}" />
+		<property name="url" value="${jdbc.write.url}" />
+		<property name="username" value="${jdbc.write.username}" />
+		<property name="password" value="${jdbc.write.password}" />
+		<property name="maxActive" value="${jdbc.write.maxActive}"></property>
+		<property name="initialSize" value="${jdbc.write.initialSize}"></property>
+		<property name="maxWait" value="${jdbc.write.maxWait}"></property>
+		<property name="minIdle" value="${jdbc.write.minIdle}"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.write.timeBetweenEvictionRunsMillis}"></property>
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.write.minEvictableIdleTimeMillis}"></property>
+		<property name="validationQuery" value="${jdbc.write.validationQuery}"></property>
+		<property name="testWhileIdle" value="${jdbc.write.testWhileIdle}"></property>
+		<property name="testOnBorrow" value="${jdbc.write.testOnBorrow}"></property>
+		<property name="testOnReturn" value="${jdbc.write.testOnReturn}"></property>
+		<property name="poolPreparedStatements" value="${jdbc.write.poolPreparedStatements}"></property>
+		<property name="maxOpenPreparedStatements" value="${jdbc.write.maxOpenPreparedStatements}"></property>
+	</bean>
+	<!--读数据连接池 -->
+	<bean id="readDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.read.driverClassName}" />
+		<property name="url" value="${jdbc.read.url}" />
+		<property name="username" value="${jdbc.read.username}" />
+		<property name="password" value="${jdbc.read.password}" />
+		<property name="maxActive" value="${jdbc.read.maxActive}"></property>
+		<property name="initialSize" value="${jdbc.read.initialSize}"></property>
+		<property name="maxWait" value="${jdbc.read.maxWait}"></property>
+		<property name="minIdle" value="${jdbc.read.minIdle}"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.read.timeBetweenEvictionRunsMillis}"></property>
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.read.minEvictableIdleTimeMillis}"></property>
+		<property name="validationQuery" value="${jdbc.read.validationQuery}"></property>
+		<property name="testWhileIdle" value="${jdbc.read.testWhileIdle}"></property>
+		<property name="testOnBorrow" value="${jdbc.read.testOnBorrow}"></property>
+		<property name="testOnReturn" value="${jdbc.read.testOnReturn}"></property>
+		<property name="poolPreparedStatements" value="${jdbc.read.poolPreparedStatements}"></property>
+		<property name="maxOpenPreparedStatements" value="${jdbc.read.maxOpenPreparedStatements}"></property>
+	</bean>
+	
+	<!-- 动态数据源配置 -->
+	<bean id="dynamicDataSource" class="com.zgxcw.framework.interceptor.dynamicdatasource.DynamicDataSource">   
+        <property name="targetDataSources">   
+            <map>   
+                <entry key="writeDataSource" value-ref="writeDataSource"/>   
+                <entry key="readDataSource" value-ref="readDataSource"/>   
+            </map>   
+        </property>   
+        <property name="defaultTargetDataSource" ref="readDataSource"/>   
+    </bean>
+	
+	<!--事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dynamicDataSource" />
+	</bean>
+		
+	<!-- 定义拦截器，用来指定事务属性、级别和异常处理 -->
+	<!--事务拦截器 -->
+	<bean id="dynamicTransactionInterceptor" class="com.zgxcw.framework.interceptor.DynamicTransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<!--writeOnly方法前缀配置 -->
+		<property name="writeMthods">
+			<list>
+				<value>find</value>
+				<value>save</value>
+				<value>edit</value>
+				<value>del</value>
+			</list>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<!-- 事务配置 -->
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="save*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="edit*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="del*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+				
+			</props>
+		</property>
+	</bean>	
+	
+	<!-- 用来定义哪些类需要事务管理 spring事务动态代理类 BeanNameAutoProxyCreator 根据类名自动代理，接受表达式 -->
+	<bean id="beanProxy" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames" value="*Mapper" />
+		<property name="interceptorNames">
+			<value>dynamicTransactionInterceptor</value>
+		</property>
+	</bean>
+	
+	<!-- sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:notenv/mybatis-config.xml" />
+		<property name="dataSource" ref="dynamicDataSource" />
+		<!--mybatis分页插件 -->
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageHelper">
+					<property name="properties">
+						<value>
+							dialect=oracle
+							reasonable=true
+							pageSizeZero=true
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+	
+	<!-- Spring bean的定义 -->
+	<!-- ================ 基础服务 begin ================ -->
+	<!-- 自动回复消息 -->
+	<bean id="wxAutoResMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WXAutoResMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxAutoResService" class="com.zgxcw.service.infrastructure.impl.WXAutoResServiceImpl">
+		<property name="wxAutoResMapper" ref="wxAutoResMapper"/>
+	</bean>
+	
+	<!-- 自动回复消息内容 -->
+	<bean id="wxAutoResContentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WXAutoResContentMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxAutoResContentService" class="com.zgxcw.service.infrastructure.impl.WXAutoResContentServiceImpl">
+		<property name="wxAutoResContentMapper" ref="wxAutoResContentMapper"/>
+	</bean>
+	
+	<!-- 自定义菜单 -->
+	<bean id="wxSelfMenuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WXSelfMenuMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxSelfMenuService" class="com.zgxcw.service.infrastructure.impl.WXSelfMenuServiceImpl">
+		<property name="wxSelfMenuMapper" ref="wxSelfMenuMapper"/>
+	</bean>
+
+	<!-- 微信网关 -->
+	<bean id="wxGetwayMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WXGetwayMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxGetwayService" class="com.zgxcw.service.infrastructure.impl.WXGetwayServiceImpl">
+		<property name="wxGetwayMapper" ref="wxGetwayMapper"/>
+	</bean>
+
+	<!-- 微信转发消息 -->
+	<bean id="wxReceiveMsgMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WxReceiveMsgMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxReceiveMsgService" class="com.zgxcw.service.infrastructure.impl.WxReceiveMsgServiceImpl">
+		<property name="wxReceiveMsgMapper" ref="wxReceiveMsgMapper"/>
+	</bean>
+
+	<!-- 微信发送消息 -->
+	<bean id="wxSendMsgLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WxSendMsgLogMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxSendMsgLogService" class="com.zgxcw.service.infrastructure.impl.WxSendMsgLogImpl">
+		<property name="wxSendMsgLogMapper" ref="wxSendMsgLogMapper"/>
+	</bean>
+
+	<!-- 微信模板 -->
+	<bean id="wxMsgTempleteMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WxMsgTempleteMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxMsgTempleteService" class="com.zgxcw.service.infrastructure.impl.WxMsgTempleteImpl">
+		<property name="wxMsgTempleteMapper" ref="wxMsgTempleteMapper"/>
+	</bean>
+
+	<!-- 微信模板发送记录 -->
+	<bean id="wxSendTempleteLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WxSendTempleteLogMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxSendTempleteLogService" class="com.zgxcw.service.infrastructure.impl.WxSendTempleteLogImpl">
+		<property name="wxSendTempleteLogMapper" ref="wxSendTempleteLogMapper"/>
+	</bean>
+
+	<!-- 微信Ref账号绑定 -->
+	<bean id="wxUserRefOpenidMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WXUserRefOpenidMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxUserRefOpenidService" class="com.zgxcw.service.infrastructure.impl.WXUserRefOpenidServiceImpl">
+		<property name="wxUserRefOpenidMapper" ref="wxUserRefOpenidMapper"/>
+	</bean>
+
+
+	<!--  -->
+	<bean id="wxBankRefOpenidMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WXBankRefOpenidMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="wxBankRefOpenidService" class="com.zgxcw.service.infrastructure.impl.WXBankRefOpenidServiceImpl">
+		<property name="wxBankRefOpenidMapper" ref="wxBankRefOpenidMapper"/>
+		<property name="wxBankUNRefOpenidLogMapper" ref="wxBankUNRefOpenidLogMapper"/>
+	</bean>
+
+	<!--  -->
+	<bean id="wxBankUNRefOpenidLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zgxcw.service.infrastructure.dao.WXBankUNRefOpenidLogMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- ================ 基础服务 end ================ -->	
+	<!-- ================ 组合服务 begin ================ -->
+	<!-- 被动消息回复 -->
+	<bean id="sendPassiveMsgService" class="com.zgxcw.service.combine.impl.SendPassiveMsgServiceImpl">
+		<property name="wxAutoResService" ref="wxAutoResService"/>
+		<property name="wxAutoResContentService" ref="wxAutoResContentService"/>
+		<property name="wxReceiveMsgService" ref="wxReceiveMsgService"/>
+		<property name="wxSendMsgLogService" ref="wxSendMsgLogService"/>		
+	</bean>
+	
+	<!-- 自定义菜单设置 -->
+	<bean id="setMenuService" class="com.zgxcw.service.combine.impl.SetMenuServiceImpl">
+		<property name="wxSelfMenuService" ref="wxSelfMenuService"/>
+		<property name="httpsUtil" ref="httpsUtil"/>
+	</bean>
+	
+	<!-- wx common service -->
+	<bean id="wxCommonService" class="com.zgxcw.service.combine.impl.WXCommonServiceImpl">
+		<property name="httpsUtil" ref="httpsUtil" />
+		<property name="wxMsgTempleteService" ref="wxMsgTempleteService" />
+		<property name="wxSendTempleteLogService" ref="wxSendTempleteLogService" />
+		<property name="wxMsgTempleteMapper" ref="wxMsgTempleteMapper"/>
+		<property name="wxUserRefOpenidService" ref="wxUserRefOpenidService"/>
+		<property name="wxBankRefOpenidService" ref="wxBankRefOpenidService"/>
+		<property name="metaqTemplate" ref="metaqTemplate"/>
+	</bean>
+	<!-- ================ 组合服务 end ================ -->
+	
+	<!-- ================ 帮助类  begin ================ -->
+	<!-- https-->
+	<bean id="httpsUtil" class="com.zgxcw.service.utils.HttpsUtil"/>
+	
+	<!-- access_token -->
+	<bean id="accessTokenUtil" class="com.zgxcw.service.utils.AccessTokenUtil">
+		<property name="httpsUtil" ref="httpsUtil"/>
+		<property name="wxGetwayService" ref="wxGetwayService"/>
+	</bean>
+	<!-- ================ 帮助类  end ================ -->
+	
+	<!-- ================ metaQ  begin ================ -->
+	<!-- metaq producer 支付生产者，调用方消费 -->
+	<bean id="sessionFactory" class="com.taobao.metamorphosis.client.extension.spring.MetaqMessageSessionFactoryBean">
+		<property name="zkConnect" value="${metaq.registry.address}" />
+		<property name="zkSessionTimeoutMs" value="30000" />
+		<property name="zkConnectionTimeoutMs" value="30000" />
+		<property name="zkSyncTimeMs" value="5000" />
+	</bean>
+	<bean id="messageBodyConverter" class="com.zgxcw.service.utils.FastJsonMessageConverter" />
+	<bean id="metaqTemplate" class="com.taobao.metamorphosis.client.extension.spring.MetaqTemplate">
+		<property name="messageSessionFactory" ref="sessionFactory" />
+		<property name="messageBodyConverter" ref="messageBodyConverter" />
+	</bean>
+	
+	<!-- metaq customer -->
+	<!-- TMS打款通知 -->
+	<bean id="odcSendWXTempMsgTopic" class="com.taobao.metamorphosis.client.extension.spring.MetaqTopic">
+		<property name="group" value="odcGroup" />
+		<property name="topic" value="ODC_SENDWXTEMPMSG" />
+		<property name="maxBufferSize" value="16384" />
+	</bean>
+	<bean id="odcSendWXTempMsgListener" class="com.zgxcw.service.metaq.ODCSendWXTempMsgListener">
+		<property name="processThreads" value="10" />
+		<property name="wxCommonService" ref="wxCommonService" />
+	</bean>
+	
+	<bean id="listenerContainer" class="com.taobao.metamorphosis.client.extension.spring.MessageListenerContainer">
+		<property name="messageSessionFactory" ref="sessionFactory" />
+		<property name="messageBodyConverter" ref="messageBodyConverter" />
+		<property name="subscribers">
+			<map>
+				<entry key-ref="odcSendWXTempMsgTopic" value-ref="odcSendWXTempMsgListener" />
+			</map>
+		</property>
+	</bean>
+	<!-- ================ metaQ  end ================ -->
+</beans>

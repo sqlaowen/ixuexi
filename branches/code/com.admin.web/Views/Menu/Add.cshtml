@@ -1,0 +1,175 @@
+﻿@model com.admin.poco.SysMenu
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutAdd2015.cshtml";
+}
+
+<!-- 操作 -->
+<div class="row-fluid">
+    <div class="span12 text-right" style="margin-bottom:5px;">
+        <input type="button" class="btn btn-info btn-sm" value="保存" name="btnSave" />
+        <input type="button" class="btn btn-info btn-sm" value="返回" name="btnBack" />
+    </div>
+</div>
+
+<!-- 表单 -->
+<div class="row-fluid">
+    <div class="span12 table-responsive">
+        <form role="form" id="form" class="form-horizontal">
+            <table class="table table-striped table-bordered table-hover">
+                <tr>
+                    <td>
+                        菜单名：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Name" name="Name" />
+                    </td>
+                    <td>
+                        上级菜单：
+                    </td>
+                    <td>
+                        <select name="PId1">
+                            <option value="">--请选择--</option>
+                            @foreach (var menu in ViewBag.ChildMenu)
+                            {
+                                if (menu.MenuId != @Model.MenuId) { 
+                                    <option value="@menu.MenuId">@menu.Name</option>
+                                }
+                            }
+                        </select>
+                        <select name="PId2" style="display:none;margin-top:10px;">
+                            <option value="">--请选择--</option>
+                        </select>
+                        <input type="hidden" name="PId" value="@Model.PId" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        菜单地址：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Url" name="Url" disabled="disabled" />
+                    </td>
+                    <td>
+                        顺序：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Sequ" name="Sequ" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        备注：
+                    </td>
+                    <td>
+                        <input type="text" class="col-xs-10" value="@Model.Note" name="Note" />
+                    </td>
+                    <td>状态：</td>
+                    <td>
+                        <select name="State" class="col-xs-10">
+                            <option value="1" @(Model.State != 0 ? "selected=selected" : "")>可用</option>
+                            <option value="0" @(Model.State == 0 ? "selected=selected" : "")>禁用</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" value="@Model.MenuId" name="MenuId" />
+            <input type="hidden" value="@Model.UpdateUser" name="UpdateUser" />
+            <input type="hidden" value="@Model.UpdateTime" name="UpdateTime" />
+            <input type="hidden" value="@Model.CreateUser" name="CreateUser" />
+            <input type="hidden" value="@Model.CreateTime" name="CreateTime" />
+            <input type="hidden" value="@Model.Level" name="Level" />
+        </form>
+    </div>
+</div>
+
+@section script{
+    <script type="text/javascript">
+        $(function () {
+            if('@Model.MenuId'!='0'){
+                $.post('/Menu/GetParentMenuById/', { id: @Model.MenuId }, function (rev) {
+                    console.log(rev);
+                    $.each(rev, function (i, v) {
+                        if (v.Level == 1) {
+                            getChildMenu(v.MenuId, 2);
+                            $('select[name="PId1"]').val(v.MenuId);
+                            $('select[name="PId1"]').change();
+                        }
+                        if (v.Level == 2) {
+                            $('select[name="PId1"]').change();
+                            $('select[name="PId2"]').val(v.MenuId);
+                            $('input[name="Url"]').prop('disabled',false);
+                        }
+                    });
+                }, 'json');
+            }
+        });
+        //change
+        $('select[name^="PId"]').on('change', function () {
+            $('input[name="Url"]').prop('disabled', true);
+            var sl = this.name.replace(/\w{3}(\d)/, '$1');
+            if (sl == '1') {
+                if (this.value == '') {
+                    $('select[name="PId2"]').css('display', 'none');
+                    $('select[name="PId2"]').find('option:gt(0)').remove();
+
+                    $('input[name="Level"]').val('1');
+                }
+                else {
+                    $('select[name="PId2"]').css('display', 'block');
+                    getChildMenu(this.value, 2);
+
+                    $('input[name="Level"]').val('2');
+                }
+                $('input[name="PId"]').val(this.value);
+            }
+            if (sl == '2') {
+                if (this.value == '') {
+                    $('input[name="Level"]').val('2');
+                    $('input[name="PId"]').val($('select[name="PId1"]').val());
+                }
+                else {
+                    $('input[name="Level"]').val('3');
+                    $('input[name="PId"]').val(this.value);
+                    $('input[name="Url"]').prop('disabled', false);
+                }
+            }
+        });
+
+        //取子级菜单
+        function getChildMenu(id, sl) {
+            $.ajax({
+                url: '/Menu/GetChildMenu/'
+                , type: 'POST'
+                , data: { id: id }
+                , async: false
+                , success: function (rev) {
+                    var _obj = $('select[name="PId' + sl + '"]');
+                    _obj.find('option:gt(0)').remove();
+                    var options = '';
+                    $.each(rev, function (i, v) {
+                        if(v.MenuId!='@Model.MenuId')
+                            options += '<option value="' + v.MenuId + '">' + v.Name + '</option>';
+                    });
+                    _obj.append(options);
+                }
+            });
+        }
+
+        //保存
+        $('input[name="btnSave"]').on('click', function () {
+            $.post('/Menu/Save/', $('#form').getFormsValue(), function (rev) {
+                if (rev.error == 0) {
+                    location.href = decodeURIComponent(getUrlParam('refUrl'));
+                }
+                else {
+                    top.warn('操作失败！请稍后再试');
+                }
+            }, 'json');
+        });
+        //返回
+        $('input[name="btnBack"]').on('click', function () {
+            location.href = decodeURIComponent(getUrlParam('refUrl'));
+        });
+    </script>
+}

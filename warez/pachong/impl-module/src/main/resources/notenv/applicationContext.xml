@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--配置文件占位符 -->
+	<import resource="classpath:env/property_configurer.xml" />
+
+	<!--数据连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="3" />
+		<property name="minIdle" value="3" />
+		<property name="maxActive" value="20" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<!-- 配置监控统计拦截的filters -->
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!--事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 定义拦截器，用来指定事务属性、级别和异常处理 -->
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="select*">PROPAGATION_REQUIRED,-Exception</prop>
+				<prop key="insert*">PROPAGATION_REQUIRED,-Exception</prop>
+
+			</props>
+		</property>
+	</bean>
+	<!-- 用来定义哪些类需要事务管理 spring事务动态代理类 BeanNameAutoProxyCreator 根据类名自动代理，接受表达式 -->
+	<bean id="beanProxy" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<value>*Mapper</value>
+		</property>
+		<property name="interceptorNames">
+			<value>transactionInterceptor</value>
+		</property>
+	</bean>
+
+	<!-- sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:notenv/mybatis-config.xml" />
+		<property name="plugins">
+			<bean class="com.github.pagehelper.PageHelper">
+				<property name="properties">
+					<value>
+						dialect=mysql
+						reasonable=true
+						pageSizeZero=true
+					</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- ================================================================== -->
+	<!-- ================================================================== -->
+
+	<!-- 商品信息 -->
+	<bean id="ecGoodsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="impl.laowen.dao.ECGoodsMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="ecGoodsService" class="impl.laowen.service.impl.ECGoodsServiceImpl">
+		<property name="ecGoodsMapper" ref="ecGoodsMapper" />
+	</bean>
+
+	<!-- 历史价格 -->
+	<bean id="ecHistoryPriceMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="impl.laowen.dao.ECHistoryPriceMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="ecHistoryPriceService" class="impl.laowen.service.impl.ECHistoryPriceServiceImpl">
+		<property name="ecHistoryPriceMapper" ref="ecHistoryPriceMapper" />
+		<property name="ecGoodsMapper" ref="ecGoodsMapper"/>
+	</bean>
+
+	<!-- 抓取 -->
+	<bean id="jdPaChongService" class="impl.laowen.service.impl.JDPaChongServiceImpl" autowire="byName">
+		<property name="ecGoodsService" ref="ecGoodsService"/>
+		<property name="skuListCss" value="${jd.sku.list.css}"/>
+		<property name="skuIDCss" value="${jd.sku.id.css}"/>
+		<property name="skuImgCss" value="${jd.sku.img.css}"/>
+		<property name="skuUrlCss" value="${jd.sku.url.css}"/>
+		<property name="skuNoteCss" value="${jd.sku.note.css}"/>
+		<property name="pageTotalCss" value="${jd.page.total.css}"/>
+		<property name="priceUrl" value="${jd.sku.price.url}"/>
+		<property name="urlMap" ref="urlMap"/>
+		<property name="ecGoodsMapper" ref="ecGoodsMapper"/>
+		<property name="threadPoolSize" value="${thread.pool.size}"/>
+	</bean>
+	<!-- //////////////////////业务相关  end////////////////////// -->
+
+</beans>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WxReceiveMsgMapper">
+	<resultMap id="BaseResultMap" type="wxReceiveMsg">
+		<id column="receiveMsgId" property="receiveMsgId" jdbcType="VARCHAR" />
+		<result column="WX_ID" property="wxId" jdbcType="VARCHAR" />
+		<result column="toUserName" property="toUserName" jdbcType="VARCHAR" />
+		<result column="fromUserName" property="fromUserName" jdbcType="VARCHAR" />
+		<result column="msgType" property="msgType" jdbcType="VARCHAR" />
+		<result column="msgId" property="msgId" jdbcType="VARCHAR" />
+		<result column="event" property="event" jdbcType="VARCHAR" />
+		<result column="eventKey" property="eventKey" jdbcType="VARCHAR" />
+		<result column="ticket" property="ticket" jdbcType="VARCHAR" />
+		<result column="latitude" property="latitude" jdbcType="VARCHAR" />
+		<result column="longitude" property="longitude" jdbcType="VARCHAR" />
+		<result column="precision" property="precision" jdbcType="VARCHAR" />
+		<result column="picUrl" property="picUrl" jdbcType="VARCHAR" />
+		<result column="mediaId" property="mediaId" jdbcType="VARCHAR" />
+		<result column="thumbMediaId" property="thumbMediaId" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="location_X" property="locationX" jdbcType="VARCHAR" />
+		<result column="location_Y" property="locationY" jdbcType="VARCHAR" />
+		<result column="scale" property="scale" jdbcType="VARCHAR" />
+		<result column="label" property="label" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="format" property="format" jdbcType="VARCHAR" />
+		<result column="recognition" property="recognition" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime" jdbcType="DECIMAL" />
+		<result column="createUser" property="createUser" jdbcType="VARCHAR" />
+		<result column="updateTime" property="updateTime" jdbcType="DECIMAL" />
+		<result column="updateUser" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ReceiveMsgId,wx_id, ToUserName,FromUserName
+		,MsgType,MsgId,Event,EventKey,Ticket
+		,Latitude,Longitude ,Precision
+		,PicUrl ,MediaId,ThumbMediaId
+		,Title,Description,Url
+		,Location_X,Location_Y,Scale,Label,Content,Format
+		,Recognition,CreateTime,CreateUser,UpdateTime,UpdateUser
+	</sql>
+
+	<select id="findById" resultMap="BaseResultMap" parameterType="string">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM T_WX_RECEIVEMSG WHERE RECEIVEMSGID= #{id}
+	</select>
+
+	<insert id="saveOne" parameterType="wxAutoRes">
+		insert into T_WX_RECEIVEMSG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="receiveMsgId != null">
+				receiveMsgId,
+			</if>
+			<if test="wxId != null">
+				WX_ID,
+			</if>
+			<if test="toUserName != null">
+				toUserName,
+			</if>
+			<if test="fromUserName != null">
+				fromUserName,
+			</if>
+			<if test="msgType != null">
+				msgType,
+			</if>
+			<if test="msgId != null">
+				msgId,
+			</if>
+			<if test="event != null">
+				event,
+			</if>
+			<if test="eventKey != null">
+				eventKey,
+			</if>
+			<if test="ticket != null">
+				ticket,
+			</if>
+			<if test="latitude != null">
+				latitude,
+			</if>
+			<if test="longitude != null">
+				longitude,
+			</if>
+			<if test="precision != null">
+				precision,
+			</if>
+			<if test="picUrl != null">
+				picUrl,
+			</if>
+			<if test="mediaId != null">
+				mediaId,
+			</if>
+			<if test="thumbMediaId != null">
+				thumbMediaId,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="locationX != null">
+				location_X,
+			</if>
+			<if test="locationY != null">
+				location_Y,
+			</if>
+			<if test="scale != null">
+				scale,
+			</if>
+			<if test="label != null">
+				label,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="format != null">
+				format,
+			</if>
+			<if test="recognition != null">
+				recognition,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="createUser != null">
+				createUser,
+			</if>
+			<if test="updateTime != null">
+				updateTime,
+			</if>
+			<if test="updateUser != null">
+				updateUser,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="receiveMsgId != null">
+				#{receiveMsgId},
+			</if>
+			<if test="wxId != null">
+				#{wxId,jdbcType=VARCHAR},
+			</if>
+			<if test="toUserName != null">
+				#{toUserName},
+			</if>
+			<if test="fromUserName != null">
+				#{fromUserName},
+			</if>
+			<if test="msgType != null">
+				#{msgType},
+			</if>
+			<if test="msgId != null">
+				#{msgId},
+			</if>
+			<if test="event != null">
+				#{event},
+			</if>
+			<if test="eventKey != null">
+				#{eventKey},
+			</if>
+			<if test="ticket != null">
+				#{ticket},
+			</if>
+			<if test="latitude != null">
+				#{latitude},
+			</if>
+			<if test="longitude != null">
+				#{longitude},
+			</if>
+			<if test="precision != null">
+				#{precision},
+			</if>
+			<if test="picUrl != null">
+				#{picUrl},
+			</if>
+			<if test="mediaId != null">
+				#{mediaId},
+			</if>
+			<if test="thumbMediaId != null">
+				#{thumbMediaId},
+			</if>
+			<if test="title != null">
+				#{title},
+			</if>
+			<if test="description != null">
+				#{description},
+			</if>
+			<if test="url != null">
+				#{url},
+			</if>
+			<if test="locationX != null">
+				#{locationX},
+			</if>
+			<if test="locationY != null">
+				#{locationY},
+			</if>
+			<if test="scale != null">
+				#{scale},
+			</if>
+			<if test="label != null">
+				#{label},
+			</if>
+			<if test="content != null">
+				#{content},
+			</if>
+			<if test="format != null">
+				#{format},
+			</if>
+			<if test="recognition != null">
+				#{recognition},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=DECIMAL},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=DECIMAL},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+</mapper>

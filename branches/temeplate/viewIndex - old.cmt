@@ -1,0 +1,148 @@
+﻿<#@ template language="c#" HostSpecific="True" #>
+<#@ output extension= ".cshtml" #>
+<#
+	TableHost host = (TableHost)(Host);		
+	
+	ColumnInfo identityKey=host.IdentityKey;
+	string returnValue = "void";
+    if (identityKey!=null)
+    {         
+         returnValue = CodeCommon.DbTypeToCS(identityKey.TypeName);              
+    }
+#>
+@{
+    ViewBag.Title = "Index";
+}
+
+	<!-- 操作 -->
+	<div class="row-fluid">
+		<div class="span12 text-right" style="margin-bottom:5px;">
+			<input type="button" class="btn btn-info btn-sm" value="添加" name="btnAdd" />
+			<input type="button" class="btn btn-info btn-sm" value="删除" name="btnDel" />
+			<input type="button" class="btn btn-info btn-sm" value="查询" name="btnSearch" data-bind="click:search" />
+		</div>
+	</div>
+	<!-- 表单 -->
+	<div class="row-fluid">
+		<div class="span12 table-responsive">
+			<form role="form" id="form" class="form-horizontal">
+				<table class="table table-striped table-bordered table-hover">
+					<tr>
+						<td style="width:60px;">
+							邮箱：
+						</td>
+						<td>
+							<input type="text" />
+						</td>
+						<td style="width:60px;">
+							密码：
+						</td>
+						<td>
+							<input type="text" />
+						</td>
+						<td style="width:60px;">
+							地址：
+						</td>
+						<td>
+							<input type="text" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	<!-- 查询结果列表 -->
+	<div class="row-fluid">
+		<div class="span12 table-responsive">
+			<table class="table table-striped table-bordered table-hover" id="table">
+				<thead style="background-color:#DBEAF9;">
+					<tr>
+						<th style="width:60px;">
+							<label><input type="checkbox" name="ckfather" />No.</label>
+							<input type="hidden" name="_hidid_" />
+						</th>
+						<# foreach (ColumnInfo c in host.Fieldlist) { #>
+						<th>
+							<#= c.Description == "" ? c.ColumnName : c.Description #>
+						</th>
+						<# } #>
+						<th>
+							操作						
+						</th>
+					</tr>
+				</thead>
+				<tbody data-bind="foreach: items">
+					<tr>
+						<td>
+							<label>
+							<input type="checkbox" name="ckson" data-bind="value:<#= host.IdentityKey.ColumnName #>" />
+							<span data-bind="text:N0"></span>
+							</label>
+						</td>
+						<# foreach (ColumnInfo c in host.Fieldlist) { #>
+						<td data-bind="text:<#= c.ColumnName #>"></td>
+						<# } #>
+						<td>
+							<a class="btn btn-info btn-sm" name="hrefEdit" data-bind="attr:{href:'/<#= host.TableName #>/Add/'+<#= host.IdentityKey.ColumnName #>}">修改</a>
+							<a class="btn btn-info btn-sm" href="javascript:;" name="hrefDel">删除</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- 分页 -->
+	<div class="row-fluid">
+		<div class="span12">
+			<ul class="pagination mypager" id="personPagination"></ul>
+		</div>
+	</div>
+	
+@section script{
+    <script type="text/javascript">	
+		//加载页面数据
+		var dateUrl = '/<#= host.TableName #>/GetList/';
+        var pageSize = 20;
+        var formContainer = 'form';
+        var bindingContainer = 'body';
+		
+        //增加
+        $('input[name="btnAdd"]').on('click', function () {
+            location.href = '/<#= host.TableName #>/Add/';
+        });
+        //删除
+        $('#table').on( 'click', 'a[name="hrefDel"]',function () {
+            var ct = ko.contextFor($(this).parent().parent().get(0));
+            top.ask('确定要删除么?', function () {
+                $.post('/<#= host.TableName #>/Del/', ct['$data'], function (rev) {
+                    if (rev.error == 0) {
+                        location.reload();
+                    }
+                    else {
+                        top.warn('操作失败,请稍后再试');
+                    }
+                }, 'json');
+            });
+        });
+        //批量删除
+        $('input[name="btnDel"]').on('click', function () {
+            var idsArr = $('input[name="_hidid_"]').val().split(',');
+            if (idsArr.indexOf('') > -1)
+                idsArr.remove(idsArr.indexOf(''));
+            if (idsArr.length == 0) {
+                top.warn('请选择要删除的数据');
+                return false;
+            }
+            top.ask('确定要删除么?', function () {
+                $.post('/<#= host.TableName #>/DelBatch/', { ids: idsArr.join(',') }, function (rev) {
+                    if (rev.error == 0) {
+                        location.href = location.href;
+                    }
+                    else {
+                        top.warn('操作失败,请稍后再试');
+                    }
+                });
+            });
+        });
+    </script>
+}

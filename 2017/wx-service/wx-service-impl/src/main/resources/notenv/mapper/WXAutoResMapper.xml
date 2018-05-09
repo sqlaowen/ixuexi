@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zgxcw.service.infrastructure.dao.WXAutoResMapper" >
+  <resultMap id="BaseResultMap" type="wxAutoRes" >
+    <id column="RES_ID" property="resId" jdbcType="VARCHAR" />
+    <result column="WX_ID" property="wxId" jdbcType="VARCHAR" />
+    <result column="RES_NAME" property="resName" jdbcType="VARCHAR" />
+    <result column="RES_TYPE" property="resType" jdbcType="VARCHAR" />
+    <result column="RES_STATE" property="resState" />
+    <result column="DISABLE_STATE" property="disableState" jdbcType="DECIMAL" />
+    <result column="Msg_Type" property="msgType" />
+    <result column="createTime" property="createTime" jdbcType="DECIMAL" />
+    <result column="createUser" property="createUser" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="DECIMAL" />
+    <result column="updateUser" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    res_id, wx_id, res_name, res_type, res_state, disable_state,Msg_Type, createTime, createUser, 
+    updateTime, updateUser
+  </sql>
+  
+  <!-- 根据id查询 -->
+  <select id="findById" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_wx_autores
+    where RES_ID = #{resId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 查询要使用的回复消息 -->
+  <select id="findTheSet" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_wx_autores
+    where res_state=0
+    and disable_state=0
+    and wx_id=#{wxId}
+    and msg_type=#{msgType}
+  </select>
+  
+  <!-- 根据回复/消息类型查询 -->
+  <select id="findByResOrMsgType" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_wx_autores
+	where 1=1
+	and DISABLE_STATE=0
+	and WX_ID=#{wxId}
+	<if test="resType!=null and resType!=''">
+		and RES_TYPE=#{resType}
+	</if>
+	<if test="msgType !=null and msgType !=''">
+		and Msg_Type=#{msgType}
+	</if>
+  </select>
+  
+  <insert id="saveOne" parameterType="wxAutoRes" >
+    insert into T_WX_AUTORES
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        RES_ID,
+      </if>
+      <if test="wxId != null" >
+        WX_ID,
+      </if>
+      <if test="resName != null" >
+        RES_NAME,
+      </if>
+      <if test="resType != null" >
+        RES_TYPE,
+      </if>
+      <if test="resState != null" >
+        RES_STATE,
+      </if>
+      <if test="disableState != null" >
+        DISABLE_STATE,
+      </if>
+      <if test="msgType != null">
+      	Msg_Type,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="createUser != null" >
+        createUser,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="updateUser != null" >
+        updateUser,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        #{resId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxId != null" >
+        #{wxId,jdbcType=VARCHAR},
+      </if>
+      <if test="resName != null" >
+        #{resName,jdbcType=VARCHAR},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="resState != null" >
+        #{resState},
+      </if>
+      <if test="disableState != null" >
+        #{disableState,jdbcType=DECIMAL},
+      </if>
+      <if test="msgType != null">
+      	#{msgType},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=DECIMAL},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="editById" parameterType="wxAutoRes" >
+    update T_WX_AUTORES
+    <set >
+      <if test="wxId != null" >
+        WX_ID = #{wxId,jdbcType=VARCHAR},
+      </if>
+      <if test="resType != null" >
+        RES_TYPE = #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="resName != null" >
+        RES_NAME = #{resName,jdbcType=VARCHAR},
+      </if>
+      <if test="resState != null" >
+        RES_STATE = #{resState},
+      </if>
+      <if test="disableState != null" >
+        DISABLE_STATE = #{disableState,jdbcType=DECIMAL},
+      </if>
+      <if test="msgType !=null">
+      	msg_Type=#{msgType},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=DECIMAL},
+      </if>
+      <if test="updateUser != null" >
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RES_ID = #{resId,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 设置其它为不可用 -->
+  <update id="editOthersDisable">
+  	update t_wx_autores set res_state=1
+  	where RES_ID !=#{resId}
+  	and wx_id=#{wxId}
+  	and msg_type=#{msgType}
+  </update>
+
+  <!--分页查询-->
+  <select id="getPageList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_wx_autores
+    where 1=1
+    and DISABLE_STATE=0
+    and WX_ID=#{wxId}
+    <if test="resName!=null and resName!=''">
+      and instr(RES_NAME,#{resName})>0
+    </if>
+    <if test="resType!=null and resType!=''">
+      and instr(RES_TYPE,#{resType})>0
+    </if>
+    <if test="resState!=null">
+      and RES_STATE=#{resState}
+    </if>
+    <if test="msgType!=null">
+      and MSG_TYPE=#{msgType}
+    </if>
+  </select>
+
+  <update id="deleteById">
+    update T_WX_AUTORES SET DISABLE_STATE =1
+    WHERE RES_ID=#{wxId}
+  </update>
+</mapper>

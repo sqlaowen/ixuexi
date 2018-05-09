@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.single.dao.PaymentOrderMapper">
+
+	<resultMap id="BaseResultMap" type="paymentOrder">
+		<id column="payment_order_id" jdbcType="VARCHAR" property="paymentOrderId" />
+		<result column="payment_id" jdbcType="VARCHAR" property="paymentId" />
+		<result column="order_id" jdbcType="VARCHAR" property="orderId" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		payment_order_id, payment_id, order_id, create_time, create_user
+	</sql>
+
+	<insert id="saveOne" parameterType="paymentOrder">
+		insert into pay_payment_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="paymentOrderId != null">
+				payment_order_id,
+			</if>
+			<if test="paymentId != null">
+				payment_id,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="paymentOrderId != null">
+				#{paymentOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentId != null">
+				#{paymentId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

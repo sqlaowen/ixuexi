@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laowen.dao.InternetCardMapper">
+
+    <resultMap id="BaseResultMap" type="internetCard">
+        <id column="msisdn" jdbcType="VARCHAR" property="msisdn"/>
+        <result column="iccid" jdbcType="VARCHAR" property="iccid"/>
+        <result column="imsi" jdbcType="VARCHAR" property="imsi"/>
+        <result column="jihuo_time" jdbcType="TIMESTAMP" property="jihuoTime"/>
+        <result column="kaika_time" jdbcType="TIMESTAMP" property="kaikaTime"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="jihuo_mark" jdbcType="INTEGER" property="jihuoMark"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="edit_time" jdbcType="TIMESTAMP" property="editTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        msisdn, iccid, imsi, jihuo_time, kaika_time,province,jihuo_mark, create_time, edit_time
+    </sql>
+
+    <select id="findByMsisdn" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from internet_card
+        where msisdn = #{msisdn,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查找list, 用于获取激活时间 -->
+    <select id="findListForFeachJihuoTime" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from internet_card
+        where jihuo_time is null
+        and jihuo_mark in(0,1)
+        and province=#{province,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertOne" parameterType="internetCard">
+        insert into internet_card
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msisdn != null">
+                msisdn,
+            </if>
+            <if test="iccid != null">
+                iccid,
+            </if>
+            <if test="imsi != null">
+                imsi,
+            </if>
+            <if test="jihuoTime != null">
+                jihuo_time,
+            </if>
+            <if test="kaikaTime != null">
+                kaika_time,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="jihuoMark != null">
+                jihuo_mark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="editTime != null">
+                edit_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msisdn != null">
+                #{msisdn,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imsi != null">
+                #{imsi,jdbcType=VARCHAR},
+            </if>
+            <if test="jihuoTime != null">
+                #{jihuoTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="kaikaTime != null">
+                #{kaikaTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="jihuoMark != null">
+                #{jihuoMark},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="editTime != null">
+                #{editTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="internetCard">
+        update internet_card
+        <set>
+            <if test="iccid != null">
+                iccid = #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imsi != null">
+                imsi = #{imsi,jdbcType=VARCHAR},
+            </if>
+            <if test="jihuoTime != null">
+                jihuo_time = #{jihuoTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="kaikaTime != null">
+                kaika_time = #{kaikaTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="jihuoMark != null">
+                jihuo_mark = #{jihuoMark},
+            </if>
+            <if test="editTime != null">
+                edit_time = #{editTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where msisdn = #{msisdn,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

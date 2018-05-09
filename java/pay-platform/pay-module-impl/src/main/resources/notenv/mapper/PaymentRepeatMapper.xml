@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pay.single.dao.PaymentRepeatMapper">
+  
+  <resultMap id="BaseResultMap" type="paymentRepeat">
+    <id column="reapeat_id" jdbcType="VARCHAR" property="reapeatId" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="payment_id" jdbcType="VARCHAR" property="paymentId" />
+    <result column="gateway_id" jdbcType="VARCHAR" property="gatewayId" />
+    <result column="merge_payment_id" jdbcType="VARCHAR" property="mergePaymentId" />
+    <result column="total_fee" jdbcType="INTEGER" property="totalFee" />
+    <result column="third_trade_no" jdbcType="VARCHAR" property="thirdTradeNo" />
+    <result column="trade_time" jdbcType="TIMESTAMP" property="tradeTime" />
+    <result column="payment_type" jdbcType="INTEGER" property="paymentType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    reapeat_id, merchant_id, payment_id, gateway_id, merge_payment_id, total_fee, third_trade_no, trade_time, payment_type, 
+    create_time, create_user
+  </sql>
+  
+  <insert id="saveOne" parameterType="paymentRepeat">
+    insert into pay_repeat_payment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="reapeatId != null">
+        reapeat_id,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="paymentId != null">
+        payment_id,
+      </if>
+      <if test="gatewayId != null">
+        gateway_id,
+      </if>
+      <if test="mergePaymentId != null">
+        merge_payment_id,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="thirdTradeNo != null">
+        third_trade_no,
+      </if>
+      <if test="tradeTime != null">
+        trade_time,
+      </if>
+      <if test="paymentType != null">
+        payment_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="reapeatId != null">
+        #{reapeatId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentId != null">
+        #{paymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="gatewayId != null">
+        #{gatewayId,jdbcType=VARCHAR},
+      </if>
+      <if test="mergePaymentId != null">
+        #{mergePaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="thirdTradeNo != null">
+        #{thirdTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTime != null">
+        #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentType != null">
+        #{paymentType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

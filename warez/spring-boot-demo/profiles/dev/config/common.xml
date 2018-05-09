@@ -1,0 +1,20 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 需要的所有配置 -->
+    <bean id="propsMap" class="java.util.HashMap">
+        <constructor-arg>
+            <props>
+                <!-- 网关id -->
+                <prop key="wxId">8df1529c1c4311e7abff705a0f1be2c6</prop>
+                <!-- 公从号 appId -->
+                <prop key="appId">wx55321f628b4acc0a</prop>
+                <!-- 系统分配的companyId -->
+                <prop key="companyId">ab05782a1c4311e7abff705a0f1be2c6</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+
+</beans>

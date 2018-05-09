@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pay.single.dao.PaymentCloseMapper" >
+  
+  <resultMap id="BaseResultMap" type="paymentClose" >
+    <id column="close_id" jdbcType="VARCHAR" property="closeId" />
+    <result column="payment_id" jdbcType="VARCHAR" property="paymentId" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="close_code" jdbcType="VARCHAR" property="closeCode" />
+    <result column="close_note" jdbcType="VARCHAR" property="closeNote" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    close_id, payment_id, merchant_id, order_id, close_code, close_note, create_time, 
+    create_user
+  </sql>
+  
+  <insert id="saveOne" parameterType="paymentClose" >
+    insert into pay_payment_close
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="closeId != null">
+        close_id,
+      </if>
+      <if test="paymentId != null">
+        payment_id,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="closeCode != null">
+        close_code,
+      </if>
+      <if test="closeNote != null">
+        close_note,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="closeId != null">
+        #{closeId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentId != null">
+        #{paymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="closeCode != null">
+        #{closeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="closeNote != null">
+        #{closeNote,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

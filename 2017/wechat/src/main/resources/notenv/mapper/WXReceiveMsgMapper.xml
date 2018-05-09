@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laowen.dao.WXReceiveMsgMapper">
+
+    <resultMap id="BaseResultMap" type="wxReceiveMsg">
+        <id column="msg_id" jdbcType="VARCHAR" property="msgId"/>
+        <result column="fans_id" jdbcType="VARCHAR" property="fansId"/>
+        <result column="wx_ghid" jdbcType="VARCHAR" property="wxGhid"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="msg_type" jdbcType="VARCHAR" property="msgType"/>
+        <result column="wx_msg_id" jdbcType="VARCHAR" property="wxMsgId"/>
+        <result column="event_" jdbcType="VARCHAR" property="event"/>
+        <result column="event_key" jdbcType="VARCHAR" property="eventKey"/>
+        <result column="ticket" jdbcType="VARCHAR" property="ticket"/>
+        <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+        <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
+        <result column="precision_" jdbcType="VARCHAR" property="precision"/>
+        <result column="pic_url" jdbcType="VARCHAR" property="picUrl"/>
+        <result column="media_id" jdbcType="VARCHAR" property="mediaId"/>
+        <result column="thumb_media_id" jdbcType="VARCHAR" property="thumbMediaId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="location_x" jdbcType="VARCHAR" property="locationX"/>
+        <result column="location_y" jdbcType="VARCHAR" property="locationY"/>
+        <result column="scale" jdbcType="VARCHAR" property="scale"/>
+        <result column="label_" jdbcType="VARCHAR" property="label"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="format" jdbcType="VARCHAR" property="format"/>
+        <result column="recognition" jdbcType="VARCHAR" property="recognition"/>
+        <result column="original_xml" jdbcType="VARCHAR" property="originalXml"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="edit_time" jdbcType="TIMESTAMP" property="editTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        msg_id, open_id, wx_ghid, msg_type, wx_msg_id, event_, event_key, ticket,
+        latitude, longitude, precision_, pic_url, media_id, thumb_media_id, title, description,
+        url, location_x, location_y, scale, label_, content, format, recognition, original_xml, create_time,
+        edit_time
+    </sql>
+
+    <insert id="insertOne" parameterType="wxReceiveMsg">
+        insert into wx_receive_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                msg_id,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="wxGhid != null">
+                wx_ghid,
+            </if>
+            <if test="msgType != null">
+                msg_type,
+            </if>
+            <if test="wxMsgId != null">
+                wx_msg_id,
+            </if>
+            <if test="event != null">
+                event_,
+            </if>
+            <if test="eventKey != null">
+                event_key,
+            </if>
+            <if test="ticket != null">
+                ticket,
+            </if>
+            <if test="latitude != null">
+                latitude,
+            </if>
+            <if test="longitude != null">
+                longitude,
+            </if>
+            <if test="precision != null">
+                precision_,
+            </if>
+            <if test="picUrl != null">
+                pic_url,
+            </if>
+            <if test="mediaId != null">
+                media_id,
+            </if>
+            <if test="thumbMediaId != null">
+                thumb_media_id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="locationX != null">
+                location_x,
+            </if>
+            <if test="locationY != null">
+                location_y,
+            </if>
+            <if test="scale != null">
+                scale,
+            </if>
+            <if test="label != null">
+                label_,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="format != null">
+                format,
+            </if>
+            <if test="recognition != null">
+                recognition,
+            </if>
+            <if test="originalXml != null">
+                original_xml,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="editTime != null">
+                edit_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                #{msgId,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="wxGhid != null">
+                #{wxGhid,jdbcType=VARCHAR},
+            </if>
+            <if test="msgType != null">
+                #{msgType,jdbcType=VARCHAR},
+            </if>
+            <if test="wxMsgId != null">
+                #{wxMsgId,jdbcType=VARCHAR},
+            </if>
+            <if test="event != null">
+                #{event,jdbcType=VARCHAR},
+            </if>
+            <if test="eventKey != null">
+                #{eventKey,jdbcType=VARCHAR},
+            </if>
+            <if test="ticket != null">
+                #{ticket,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null">
+                #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null">
+                #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="precision != null">
+                #{precision,jdbcType=VARCHAR},
+            </if>
+            <if test="picUrl != null">
+                #{picUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="mediaId != null">
+                #{mediaId,jdbcType=VARCHAR},
+            </if>
+            <if test="thumbMediaId != null">
+                #{thumbMediaId,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="locationX != null">
+                #{locationX,jdbcType=VARCHAR},
+            </if>
+            <if test="locationY != null">
+                #{locationY,jdbcType=VARCHAR},
+            </if>
+            <if test="scale != null">
+                #{scale,jdbcType=VARCHAR},
+            </if>
+            <if test="label != null">
+                #{label,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="format != null">
+                #{format,jdbcType=VARCHAR},
+            </if>
+            <if test="recognition != null">
+                #{recognition,jdbcType=VARCHAR},
+            </if>
+            <if test="originalXml != null">
+                #{originalXml,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="editTime != null">
+                #{editTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

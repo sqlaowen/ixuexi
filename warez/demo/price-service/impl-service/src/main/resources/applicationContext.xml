@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--配置文件占位符 -->
+	<import resource="classpath:env/property_configurer.xml" />
+
+	<!-- 数据库配制 -->
+
+	<!-- ================================================================== -->
+	<!-- ================================================================== -->
+
+	<!-- 商品信息 -->
+	<bean id="ecGoodsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.warez.dao.ECGoodsMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="ecGoodsService" class="com.warez.service.impl.ECGoodsServiceImpl">
+		<property name="ecGoodsMapper" ref="ecGoodsMapper" />
+	</bean>
+
+	<!-- 历史价格 -->
+	<bean id="ecHistoryPriceMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.warez.dao.ECHistoryPriceMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="ecHistoryPriceService" class="com.warez.service.impl.ECHistoryPriceServiceImpl">
+		<property name="ecHistoryPriceMapper" ref="ecHistoryPriceMapper" />
+		<property name="ecGoodsMapper" ref="ecGoodsMapper"/>
+	</bean>
+
+	<!-- 抓取 -->
+	<bean class="com.warez.service.impl.GrabPriceServiceImpl">
+		<property name="ecGoodsService" ref="ecGoodsService"/>
+		<property name="ecHistoryPriceService" ref="ecHistoryPriceService"/>
+		<property name="skuListCss" value="${jd.sku.list.css}"/>
+		<property name="skuIDCss" value="${jd.sku.id.css}"/>
+		<property name="skuImgCss" value="${jd.sku.img.css}"/>
+		<property name="skuUrlCss" value="${jd.sku.url.css}"/>
+		<property name="skuNoteCss" value="${jd.sku.note.css}"/>
+		<property name="pageTotalCss" value="${jd.page.total.css}"/>
+		<property name="priceUrl" value="${jd.sku.price.url}"/>
+		<property name="urlList" ref="urlList"/>
+	</bean>
+	<!-- //////////////////////业务相关  end////////////////////// -->
+
+</beans>

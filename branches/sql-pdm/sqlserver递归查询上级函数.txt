@@ -1,0 +1,35 @@
+IF EXISTS(
+SELECT * FROM sysobjects WHERE xtype='TF' AND id =OBJECT_ID('fn_getParentArea')
+)
+DROP FUNCTION [dbo].[fn_getParentArea]
+GO
+
+
+-- =============================================
+-- Author:		
+-- Create date: 2014-09-19
+-- Description:	获取上级行政区划
+-- =============================================
+CREATE FUNCTION [dbo].[fn_getParentArea] 
+(	
+	@id INT
+)
+RETURNS  @_table TABLE 
+(
+	pArea VARCHAR(1000)
+)
+AS
+BEGIN
+	WITH cte1 AS (
+		SELECT * FROM dbo.Area WHERE [State]=1 AND AreaId=@id
+		UNION ALL
+		SELECT a.* FROM dbo.Area a
+		JOIN cte1 c ON c.Pid=a.AreaId
+		WHERE a.[State]=1
+	)
+	INSERT INTO @_table( pArea )
+	SELECT AreaName FROM cte1
+	RETURN
+END
+
+GO

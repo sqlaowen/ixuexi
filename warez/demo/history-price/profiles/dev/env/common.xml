@@ -1,0 +1,71 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 将要抓取的list页 -->
+	<bean id="urlList" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<!-- 手机 -->
+				<value>https://list.jd.com/list.html?cat=9987,653,655</value>
+				<!-- 学生平板 -->
+				<value>https://list.jd.com/list.html?cat=652,12346,12358</value>
+				<!-- 点读笔 -->
+				<value>https://list.jd.com/list.html?cat=652,12346,12357</value>
+				<!-- 电纸书 -->
+				<value>https://list.jd.com/list.html?cat=652,12346,1203</value>
+				<!-- 电视 -->
+				<value>https://list.jd.com/list.html?cat=737,794,798</value>
+				<!-- 空调 -->
+				<value>https://list.jd.com/list.html?cat=737,794,870</value>
+				<!-- 洗衣机 -->
+				<value>https://list.jd.com/list.html?cat=737,794,880</value>
+				<!-- 冰箱 -->
+				<value>https://list.jd.com/list.html?cat=737,794,878</value>
+				<!-- 油烟机 -->
+				<value>https://list.jd.com/list.html?cat=737,13297,1300</value>
+				<!-- 热水器 -->
+				<value>https://list.jd.com/list.html?cat=737,13297,1706</value>
+				<!-- 笔记本 -->
+				<value>https://list.jd.com/list.html?cat=670,671,672</value>
+				<!-- 游戏本 -->
+				<value>https://list.jd.com/list.html?cat=670,671,1105</value>
+				<!-- 平板电脑 -->
+				<value>https://list.jd.com/list.html?cat=670,671,2694</value>
+				<!-- 台式机 -->
+				<value>https://list.jd.com/list.html?cat=670,671,673</value>
+				<!-- 一体机 -->
+				<value>https://list.jd.com/list.html?cat=670,671,12798</value>
+				<!-- 服务器/工作站 -->
+				<value>https://list.jd.com/list.html?cat=670,671,674</value>
+				<!-- 显示器 -->
+				<value>https://list.jd.com/list.html?cat=670,677,688</value>
+				<!-- CPU -->
+				<value>https://list.jd.com/list.html?cat=670,677,678</value>
+				<!-- 主板 -->
+				<value>https://list.jd.com/list.html?cat=670,677,681</value>
+				<!-- 显卡 -->
+				<value>https://list.jd.com/list.html?cat=670,677,679</value>
+				<!-- 硬盘 -->
+				<value>https://list.jd.com/list.html?cat=670,677,683</value>
+				<!-- 内存 -->
+				<value>https://list.jd.com/list.html?cat=670,677,680</value>
+				<!-- 电源 -->
+				<value>https://list.jd.com/list.html?cat=670,677,691</value>
+				<!-- SSD固态硬盘 -->
+				<value>https://list.jd.com/list.html?cat=670,677,11303</value>
+				<!-- 路由器 -->
+				<value>https://list.jd.com/list.html?cat=670,699,700</value>
+				<!-- 机顶盒 -->
+				<value>https://list.jd.com/list.html?cat=670,699,11304</value>
+				<!-- 交换机 -->
+				<value>https://list.jd.com/list.html?cat=670,699,702</value>
+				<!-- 网卡 -->
+				<value>https://list.jd.com/list.html?cat=670,699,701</value>
+				<!-- 游戏机 -->
+				<value>https://list.jd.com/list.html?cat=670,12800,12801</value>
+			</list>
+		</constructor-arg>
+	</bean>
+</beans>
